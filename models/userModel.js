@@ -19,6 +19,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'profile.png'
     },
+    birthDate: {
+        type: Date
+    },
+    gender: {
+        type: String,
+        enum: ['male', 'female', 'other', 'prefer-not-to-say'],
+        default: 'prefer-not-to-say'
+    },
     role: {
         type: String,
         enum: ['user', 'admin', 'dev'],

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | Portfolio Profile Management</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="admin-body">
+
+  <!-- Admin Navigation Bar -->
+  <nav class="navbar scrolled">
+    <div class="container nav-content">
+      <a href="/" class="logo">
+        <span class="logo-icon"></span>
+        Flutter<span>Dev</span> <span class="admin-badge">Admin</span>
+      </a>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <a href="/" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.85rem;">
+          <i class="fa-solid fa-house"></i> View Website
+        </a>
+        <button id="admin-logout-btn" class="btn btn-primary" style="display: none; padding: 8px 16px; font-size: 0.85rem; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444;">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="admin-container">
+    
+    <!-- 1. LOGIN VIEW (Unauthenticated) -->
+    <div id="admin-login-view" class="admin-card login-card">
+      <div class="admin-header">
+        <div class="admin-icon-box">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h2>Admin Authentication</h2>
+        <p>Sign in to manage your profile photo, name, birth date & gender.</p>
+      </div>
+
+      <div class="demo-credentials-box">
+        <div style="font-weight: 600; font-size: 0.85rem; color: #00D2FF; margin-bottom: 4px;">
+          <i class="fa-solid fa-key"></i> Default Admin Credentials:
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">
+          Email: <code style="color: #fff; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">admin@portfolio.dev</code><br>
+          Password: <code style="color: #fff; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px;">AdminPass123!</code>
+        </div>
+      </div>
+
+      <form id="admin-login-form" class="admin-form">
+        <div class="form-group">
+          <label for="login-email">Admin Email</label>
+          <div class="input-icon-wrapper">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input type="email" id="login-email" placeholder="admin@portfolio.dev" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <div class="input-icon-wrapper">
+            <i class="fa-solid fa-lock input-icon"></i>
+            <input type="password" id="login-password" placeholder="••••••••" required>
+          </div>
+        </div>
+
+        <div id="login-error-msg" class="error-banner" style="display: none;"></div>
+
+        <button type="submit" id="login-submit-btn" class="btn btn-primary btn-full">
+          <i class="fa-solid fa-lock-open"></i> Access Admin Panel
+        </button>
+      </form>
+    </div>
+
+    <!-- 2. DASHBOARD VIEW (Authenticated) -->
+    <div id="admin-dashboard-view" class="admin-card dashboard-card" style="display: none;">
+      <div class="dashboard-header">
+        <div>
+          <h2><i class="fa-solid fa-user-gear gradient-icon"></i> Profile Settings</h2>
+          <p>Update your personal information displayed across the website.</p>
+        </div>
+        <div class="admin-user-badge">
+          <span class="pulse-dot"></span> Authenticated Admin
+        </div>
+      </div>
+
+      <form id="admin-profile-form" class="admin-form">
+        <!-- Photo Uploader Section -->
+        <div class="profile-photo-section">
+          <label>Profile Image</label>
+          <div class="photo-upload-container">
+            <div class="photo-preview-wrapper">
+              <img id="admin-avatar-preview" src="/img/avatar.png" alt="Profile Preview" class="photo-preview">
+              <div class="photo-upload-overlay" id="trigger-photo-upload">
+                <i class="fa-solid fa-camera"></i>
+                <span>Change</span>
+              </div>
+            </div>
+            <input type="file" id="admin-photo-input" accept="image/*" style="display: none;">
+            <div class="photo-instructions">
+              <h4>Upload Your Photo</h4>
+              <p>JPG, PNG or WEBP up to 10MB. Photo is automatically cropped & optimized for display.</p>
+              <button type="button" class="btn btn-outline btn-sm" id="choose-photo-btn">
+                <i class="fa-solid fa-upload"></i> Select Image
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <!-- Full Name -->
+          <div class="form-group">
+            <label for="admin-name-input">Full Name</label>
+            <div class="input-icon-wrapper">
+              <i class="fa-solid fa-user input-icon"></i>
+              <input type="text" id="admin-name-input" placeholder="e.g. Mahbub Rahman" required>
+            </div>
+          </div>
+
+          <!-- Email (Read-only) -->
+          <div class="form-group">
+            <label for="admin-email-display">Email Address (Account ID)</label>
+            <div class="input-icon-wrapper">
+              <i class="fa-solid fa-envelope input-icon"></i>
+              <input type="email" id="admin-email-display" readonly style="opacity: 0.7; cursor: not-allowed;">
+            </div>
+          </div>
+
+          <!-- Birth Date -->
+          <div class="form-group">
+            <label for="admin-birthdate-input">Birth Date</label>
+            <div class="input-icon-wrapper">
+              <i class="fa-solid fa-calendar-days input-icon"></i>
+              <input type="date" id="admin-birthdate-input" required>
+            </div>
+          </div>
+
+          <!-- Gender -->
+          <div class="form-group">
+            <label for="admin-gender-input">Gender</label>
+            <div class="input-icon-wrapper">
+              <i class="fa-solid fa-venus-mars input-icon"></i>
+              <select id="admin-gender-input" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+                <option value="prefer-not-to-say">Prefer not to say</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div style="margin-top: 24px; display: flex; gap: 12px; align-items: center; justify-content: flex-end;">
+          <button type="submit" id="save-profile-btn" class="btn btn-primary" style="padding: 12px 28px;">
+            <i class="fa-solid fa-floppy-disk"></i> Save Profile Changes
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="admin-toast" class="admin-toast" style="display: none;"></div>
+
+  <!-- Admin JavaScript -->
+  <script src="/js/admin.js"></script>
+</body>
+</html>

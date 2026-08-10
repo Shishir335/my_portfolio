@@ -8,10 +8,9 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const compression = require('compression');
 
-const productRouter = require('./routes/productRoutes');
 const userRouter = require('./routes/userRoutes');
-const categoryRouter = require('./routes/categoryRoutes');
-const reviewRouter = require('./routes/reviewRoutes');
+const uploadRouter = require('./routes/uploadRoutes');
+const adminRouter = require('./routes/adminRoutes');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -65,23 +64,26 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
 app.get('/api/v1', (req, res) => {
     res.status(200).json({
         status: 'success',
-        message: 'Welcome to Nature API!',
+        message: 'Welcome to Flutter Developer Portfolio & Admin API!',
         endpoints: {
-            products: '/api/v1/products',
-            categories: '/api/v1/categories',
-            reviews: '/api/v1/reviews',
+            admin: '/api/v1/admin',
+            publicProfile: '/api/v1/admin/public-profile',
+            uploadAvatar: '/api/v1/upload-avatar',
             users: '/api/v1/users'
         }
     });
 });
 
-app.use('/api/v1/products', productRouter);
-app.use('/api/v1/categories', categoryRouter);
-app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/upload-avatar', uploadRouter);
+app.use('/api/v1/admin', adminRouter);
 
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

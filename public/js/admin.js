@@ -137,9 +137,114 @@ document.addEventListener('DOMContentLoaded', () => {
       if (user.statApps && statAppsInput) statAppsInput.value = user.statApps;
       if (user.statCrashFree && statCrashFreeInput) statCrashFreeInput.value = user.statCrashFree;
       if (user.statUsers && statUsersInput) statUsersInput.value = user.statUsers;
+
+      if (user.skills && Array.isArray(user.skills)) {
+        currentSkills = user.skills;
+        renderSkillsEditor();
+      }
     } catch (e) {
       console.error('Error populating dashboard:', e);
     }
+  };
+
+  // Drawer Navigation Tabs Switching
+  const drawerBtns = document.querySelectorAll('.admin-drawer-btn');
+  const tabPanes = document.querySelectorAll('.admin-tab-pane');
+
+  drawerBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTabId = btn.getAttribute('data-tab');
+      drawerBtns.forEach(b => b.classList.remove('active'));
+      tabPanes.forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      const activePane = document.getElementById(targetTabId);
+      if (activePane) activePane.classList.add('active');
+    });
+  });
+
+  // Skills Section Editor
+  let currentSkills = [];
+  const skillsContainer = document.getElementById('admin-skills-editor-container');
+  const addSkillBtn = document.getElementById('add-skill-card-btn');
+
+  const renderSkillsEditor = () => {
+    if (!skillsContainer) return;
+    skillsContainer.innerHTML = '';
+
+    currentSkills.forEach((skill, index) => {
+      const card = document.createElement('div');
+      card.style.cssText = 'background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; position: relative;';
+
+      card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--flutter-cyan);">Skill Card #${index + 1}</h4>
+          <button type="button" class="btn btn-sm" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px;" onclick="removeSkillCard(${index})">
+            <i class="fa-solid fa-trash"></i> Remove
+          </button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Title</label>
+            <input type="text" class="skill-input-title" data-index="${index}" value="${skill.title || ''}" placeholder="e.g. Flutter & Dart Core" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Description</label>
+            <textarea class="skill-input-desc" data-index="${index}" rows="2" placeholder="Describe key mastery focus..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px; resize: vertical;">${skill.description || ''}</textarea>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Tags (comma separated)</label>
+            <input type="text" class="skill-input-tags" data-index="${index}" value="${(skill.tags || []).join(', ')}" placeholder="e.g. Flutter 3.x, Dart 3, Isolates" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+          </div>
+        </div>
+      `;
+
+      skillsContainer.appendChild(card);
+    });
+  };
+
+  window.removeSkillCard = (index) => {
+    currentSkills.splice(index, 1);
+    renderSkillsEditor();
+  };
+
+  if (addSkillBtn) {
+    addSkillBtn.addEventListener('click', () => {
+      currentSkills.push({
+        title: 'New Skill Focus',
+        description: 'Describe your expertise in this category...',
+        tags: ['Skill 1', 'Skill 2'],
+        icon: 'fa-solid fa-code',
+        color: '#00D2FF'
+      });
+      renderSkillsEditor();
+    });
+  }
+
+  const collectSkillsData = () => {
+    const titleInputs = document.querySelectorAll('.skill-input-title');
+    const descInputs = document.querySelectorAll('.skill-input-desc');
+    const tagsInputs = document.querySelectorAll('.skill-input-tags');
+
+    const updatedSkills = [];
+    titleInputs.forEach((input, index) => {
+      const title = input.value.trim();
+      const description = descInputs[index] ? descInputs[index].value.trim() : '';
+      const tagsStr = tagsInputs[index] ? tagsInputs[index].value : '';
+      const tags = tagsStr.split(',').map(t => t.trim()).filter(Boolean);
+
+      if (title) {
+        updatedSkills.push({
+          title,
+          description,
+          tags,
+          icon: currentSkills[index]?.icon || 'fa-solid fa-code',
+          color: currentSkills[index]?.color || '#00D2FF'
+        });
+      }
+    });
+
+    return updatedSkills;
   };
 
   // 1. Handle Admin Login
@@ -236,6 +341,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const birthVal = birthDateInput ? birthDateInput.value : null;
         const genderVal = genderInput ? genderInput.value : 'prefer-not-to-say';
 
+        const skillsData = collectSkillsData();
+
         if (selectedPhotoFile) {
           const formData = new FormData();
           formData.append('name', nameVal);
@@ -249,6 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (statAppsInput) formData.append('statApps', statAppsInput.value.trim());
           if (statCrashFreeInput) formData.append('statCrashFree', statCrashFreeInput.value.trim());
           if (statUsersInput) formData.append('statUsers', statUsersInput.value.trim());
+          formData.append('skills', JSON.stringify(skillsData));
           formData.append('photo', selectedPhotoFile);
 
           res = await fetch('/api/v1/admin/profile', {
@@ -269,7 +377,8 @@ document.addEventListener('DOMContentLoaded', () => {
             statYearsExp: statYearsInput ? statYearsInput.value.trim() : '',
             statApps: statAppsInput ? statAppsInput.value.trim() : '',
             statCrashFree: statCrashFreeInput ? statCrashFreeInput.value.trim() : '',
-            statUsers: statUsersInput ? statUsersInput.value.trim() : ''
+            statUsers: statUsersInput ? statUsersInput.value.trim() : '',
+            skills: skillsData
           };
 
           res = await fetch('/api/v1/admin/profile', {

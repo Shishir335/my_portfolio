@@ -55,6 +55,32 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: '100k+'
     },
+    skills: {
+        type: Array,
+        default: [
+            {
+                title: 'Flutter & Dart Core',
+                description: 'Custom painters, smooth 120 FPS animations, Impeller engine optimization, and native platform channels (Swift/Kotlin).',
+                tags: ['Flutter 3.x', 'Dart 3', 'Platform Channels', 'Isolates'],
+                icon: 'fa-brands fa-flutter',
+                color: '#00D2FF'
+            },
+            {
+                title: 'State & Architecture',
+                description: 'Unidirectional data flow, clean architecture separation of concerns, dependency injection, and deterministic state.',
+                tags: ['Riverpod', 'flutter_bloc', 'Provider', 'GetIt'],
+                icon: 'fa-solid fa-sitemap',
+                color: '#a855f7'
+            },
+            {
+                title: 'Backend & APIs',
+                description: 'Node.js Express REST APIs, MongoDB Mongoose ODM, Firebase Auth/FCM, GraphQL, and WebSockets.',
+                tags: ['Node.js', 'Express', 'MongoDB', 'Firebase'],
+                icon: 'fa-solid fa-server',
+                color: '#10b981'
+            }
+        ]
+    },
     role: {
         type: String,
         enum: ['user', 'admin', 'dev'],

@@ -76,158 +76,203 @@
     </div>
 
     <!-- 2. DASHBOARD VIEW (Authenticated) -->
-    <div id="admin-dashboard-view" class="admin-card dashboard-card" style="display: none;">
-      <div class="dashboard-header">
-        <div>
-          <h2><i class="fa-solid fa-user-gear gradient-icon"></i> Profile Settings</h2>
-          <p>Update your personal information displayed across the website.</p>
-        </div>
-        <div class="admin-user-badge">
-          <span class="pulse-dot"></span> Authenticated Admin
-        </div>
-      </div>
+    <div id="admin-dashboard-view" style="display: none;">
+      <div class="admin-drawer-layout">
 
-      <form id="admin-profile-form" class="admin-form">
-        <!-- Photo Uploader Section -->
-        <div class="profile-photo-section">
-          <label>Profile Image</label>
-          <div class="photo-upload-container">
-            <div class="photo-preview-wrapper">
-              <img id="admin-avatar-preview" src="/img/avatar.png" alt="Profile Preview" class="photo-preview">
-              <div class="photo-upload-overlay" id="trigger-photo-upload">
-                <i class="fa-solid fa-camera"></i>
-                <span>Change</span>
-              </div>
-            </div>
-            <input type="file" id="admin-photo-input" accept="image/*" style="display: none;">
-            <div class="photo-instructions">
-              <h4>Upload Your Photo</h4>
-              <p>JPG, PNG or WEBP up to 10MB. Photo is automatically cropped & optimized for display.</p>
-              <button type="button" class="btn btn-outline btn-sm" id="choose-photo-btn">
-                <i class="fa-solid fa-upload"></i> Select Image
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-grid">
-          <!-- Full Name -->
-          <div class="form-group">
-            <label for="admin-name-input">Full Name</label>
-            <div class="input-icon-wrapper">
-              <i class="fa-solid fa-user input-icon"></i>
-              <input type="text" id="admin-name-input" placeholder="e.g. Mahbub Rahman" required>
-            </div>
-          </div>
-
-          <!-- Email (Read-only) -->
-          <div class="form-group">
-            <label for="admin-email-display">Email Address (Account ID)</label>
-            <div class="input-icon-wrapper">
-              <i class="fa-solid fa-envelope input-icon"></i>
-              <input type="email" id="admin-email-display" readonly style="opacity: 0.7; cursor: not-allowed;">
-            </div>
-          </div>
-
-          <!-- Birth Date -->
-          <div class="form-group">
-            <label for="admin-birthdate-input">Birth Date</label>
-            <div class="input-icon-wrapper">
-              <i class="fa-solid fa-calendar-days input-icon" id="calendar-icon-btn" style="cursor: pointer;"></i>
-              <input type="text" id="admin-birthdate-input" placeholder="Select your birth date..."
-                style="cursor: pointer;">
-            </div>
-          </div>
-
-          <!-- Gender -->
-          <div class="form-group">
-            <label for="admin-gender-input">Gender</label>
-            <div class="input-icon-wrapper">
-              <i class="fa-solid fa-venus-mars input-icon"></i>
-              <select id="admin-gender-input" required>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
-                <option value="prefer-not-to-say">Prefer not to say</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- About & Hero Section Controls -->
-        <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-color);">
-          <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--flutter-cyan); display: flex; align-items: center; gap: 8px;">
-            <i class="fa-solid fa-address-card"></i> About & Hero Section Settings
-          </h3>
-          
-          <div class="form-group" style="margin-bottom: 16px;">
-            <label for="admin-about-badge-input">Hero Availability Tagline / Badge</label>
-            <div class="input-icon-wrapper">
-              <i class="fa-solid fa-circle-dot input-icon"></i>
-              <input type="text" id="admin-about-badge-input" placeholder="e.g. Available for Senior Flutter Roles" required>
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 16px;">
-            <label for="admin-about-title-input">Hero Headline Title</label>
-            <div class="input-icon-wrapper">
-              <i class="fa-solid fa-heading input-icon"></i>
-              <input type="text" id="admin-about-title-input" placeholder="e.g. Crafting 60 FPS Cross-Platform Apps" required>
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 16px;">
-            <label for="admin-about-bio-input">About Bio / Description</label>
-            <textarea id="admin-about-bio-input" rows="4" placeholder="Describe your experience and engineering focus..." required
-              style="width: 100%; padding: 12px; border-radius: 8px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-family: inherit; font-size: 0.95rem; resize: vertical; margin-top: 6px;"></textarea>
-          </div>
-
-          <!-- Stats Grid -->
-          <h4 style="font-size: 0.95rem; font-weight: 600; margin: 20px 0 12px; color: var(--text-main);">
-            Key Performance Statistics
-          </h4>
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="admin-stat-years-input">Years Experience</label>
-              <div class="input-icon-wrapper">
-                <i class="fa-solid fa-briefcase input-icon"></i>
-                <input type="text" id="admin-stat-years-input" placeholder="e.g. 4+" required>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="admin-stat-apps-input">Published Mobile Apps</label>
-              <div class="input-icon-wrapper">
-                <i class="fa-solid fa-mobile-screen-button input-icon"></i>
-                <input type="text" id="admin-stat-apps-input" placeholder="e.g. 25+" required>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="admin-stat-crashfree-input">Crash-Free Sessions Rate</label>
-              <div class="input-icon-wrapper">
-                <i class="fa-solid fa-shield-heart input-icon"></i>
-                <input type="text" id="admin-stat-crashfree-input" placeholder="e.g. 99.9%" required>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="admin-stat-users-input">Active App Users</label>
-              <div class="input-icon-wrapper">
-                <i class="fa-solid fa-users input-icon"></i>
-                <input type="text" id="admin-stat-users-input" placeholder="e.g. 100k+" required>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Submit Button -->
-        <div style="margin-top: 28px; display: flex; gap: 12px; align-items: center; justify-content: flex-end;">
-          <button type="submit" id="save-profile-btn" class="btn btn-primary" style="padding: 12px 28px;">
-            <i class="fa-solid fa-floppy-disk"></i> Save Profile Changes
+        <!-- Left Drawer Sidebar -->
+        <div class="admin-sidebar">
+          <button type="button" class="admin-drawer-btn active" data-tab="tab-profile">
+            <i class="fa-solid fa-user-gear"></i> Profile & Avatar
+          </button>
+          <button type="button" class="admin-drawer-btn" data-tab="tab-about">
+            <i class="fa-solid fa-address-card"></i> About & Hero
+          </button>
+          <button type="button" class="admin-drawer-btn" data-tab="tab-skills">
+            <i class="fa-solid fa-laptop-code"></i> Skills & Tech Stack
           </button>
         </div>
-      </form>
+
+        <!-- Right Content Area -->
+        <div class="admin-card dashboard-card">
+          <form id="admin-profile-form" class="admin-form">
+
+            <!-- TAB 1: PROFILE & AVATAR -->
+            <div id="tab-profile" class="admin-tab-pane active">
+              <div class="dashboard-header">
+                <div>
+                  <h2><i class="fa-solid fa-user-gear gradient-icon"></i> Profile Settings</h2>
+                  <p>Update your personal information displayed across the website.</p>
+                </div>
+                <div class="admin-user-badge">
+                  <span class="pulse-dot"></span> Authenticated Admin
+                </div>
+              </div>
+
+              <!-- Photo Uploader Section -->
+              <div class="profile-photo-section">
+                <label>Profile Image</label>
+                <div class="photo-upload-container">
+                  <div class="photo-preview-wrapper">
+                    <img id="admin-avatar-preview" src="/img/avatar.png" alt="Profile Preview" class="photo-preview">
+                    <div class="photo-upload-overlay" id="trigger-photo-upload">
+                      <i class="fa-solid fa-camera"></i>
+                      <span>Change</span>
+                    </div>
+                  </div>
+                  <input type="file" id="admin-photo-input" accept="image/*" style="display: none;">
+                  <div class="photo-instructions">
+                    <h4>Upload Your Photo</h4>
+                    <p>JPG, PNG or WEBP up to 10MB. Photo is automatically cropped & optimized for display.</p>
+                    <button type="button" class="btn btn-outline btn-sm" id="choose-photo-btn">
+                      <i class="fa-solid fa-upload"></i> Select Image
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <!-- Full Name -->
+                <div class="form-group">
+                  <label for="admin-name-input">Full Name</label>
+                  <div class="input-icon-wrapper">
+                    <i class="fa-solid fa-user input-icon"></i>
+                    <input type="text" id="admin-name-input" placeholder="e.g. Mahbub Rahman" required>
+                  </div>
+                </div>
+
+                <!-- Email (Read-only) -->
+                <div class="form-group">
+                  <label for="admin-email-display">Email Address (Account ID)</label>
+                  <div class="input-icon-wrapper">
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input type="email" id="admin-email-display" readonly style="opacity: 0.7; cursor: not-allowed;">
+                  </div>
+                </div>
+
+                <!-- Birth Date -->
+                <div class="form-group">
+                  <label for="admin-birthdate-input">Birth Date</label>
+                  <div class="input-icon-wrapper">
+                    <i class="fa-solid fa-calendar-days input-icon" id="calendar-icon-btn" style="cursor: pointer;"></i>
+                    <input type="text" id="admin-birthdate-input" placeholder="Select your birth date..."
+                      style="cursor: pointer;">
+                  </div>
+                </div>
+
+                <!-- Gender -->
+                <div class="form-group">
+                  <label for="admin-gender-input">Gender</label>
+                  <div class="input-icon-wrapper">
+                    <i class="fa-solid fa-venus-mars input-icon"></i>
+                    <select id="admin-gender-input" required>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                      <option value="prefer-not-to-say">Prefer not to say</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 2: ABOUT & HERO SECTION -->
+            <div id="tab-about" class="admin-tab-pane">
+              <div class="dashboard-header">
+                <div>
+                  <h2><i class="fa-solid fa-address-card gradient-icon"></i> About & Hero Settings</h2>
+                  <p>Manage your headline, tagline bio, and key statistics.</p>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label for="admin-about-badge-input">Hero Availability Tagline / Badge</label>
+                <div class="input-icon-wrapper">
+                  <i class="fa-solid fa-circle-dot input-icon"></i>
+                  <input type="text" id="admin-about-badge-input" placeholder="e.g. Available for Senior Flutter Roles" required>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label for="admin-about-title-input">Hero Headline Title</label>
+                <div class="input-icon-wrapper">
+                  <i class="fa-solid fa-heading input-icon"></i>
+                  <input type="text" id="admin-about-title-input" placeholder="e.g. Crafting 60 FPS Cross-Platform Apps" required>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label for="admin-about-bio-input">About Bio / Description</label>
+                <textarea id="admin-about-bio-input" rows="4" placeholder="Describe your experience and engineering focus..." required
+                  style="width: 100%; padding: 12px; border-radius: 8px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-family: inherit; font-size: 0.95rem; resize: vertical; margin-top: 6px;"></textarea>
+              </div>
+
+              <!-- Stats Grid -->
+              <h4 style="font-size: 0.95rem; font-weight: 600; margin: 20px 0 12px; color: var(--text-main);">
+                Key Performance Statistics
+              </h4>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="admin-stat-years-input">Years Experience</label>
+                  <div class="input-icon-wrapper">
+                    <i class="fa-solid fa-briefcase input-icon"></i>
+                    <input type="text" id="admin-stat-years-input" placeholder="e.g. 4+" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="admin-stat-apps-input">Published Mobile Apps</label>
+                  <div class="input-icon-wrapper">
+                    <i class="fa-solid fa-mobile-screen-button input-icon"></i>
+                    <input type="text" id="admin-stat-apps-input" placeholder="e.g. 25+" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="admin-stat-crashfree-input">Crash-Free Sessions Rate</label>
+                  <div class="input-icon-wrapper">
+                    <i class="fa-solid fa-shield-heart input-icon"></i>
+                    <input type="text" id="admin-stat-crashfree-input" placeholder="e.g. 99.9%" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="admin-stat-users-input">Active App Users</label>
+                  <div class="input-icon-wrapper">
+                    <i class="fa-solid fa-users input-icon"></i>
+                    <input type="text" id="admin-stat-users-input" placeholder="e.g. 100k+" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 3: SKILLS & TECH STACK -->
+            <div id="tab-skills" class="admin-tab-pane">
+              <div class="dashboard-header" style="margin-bottom: 20px;">
+                <div>
+                  <h2><i class="fa-solid fa-laptop-code gradient-icon"></i> Skills & Tech Stack</h2>
+                  <p>Manage your technical mastery categories, descriptions, and tags.</p>
+                </div>
+                <button type="button" class="btn btn-outline btn-sm" id="add-skill-card-btn">
+                  <i class="fa-solid fa-plus"></i> Add Skill Card
+                </button>
+              </div>
+
+              <div id="admin-skills-editor-container" style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Dynamically populated skill card editors -->
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div style="margin-top: 28px; display: flex; gap: 12px; align-items: center; justify-content: flex-end; padding-top: 20px; border-top: 1px solid var(--border-color);">
+              <button type="submit" id="save-profile-btn" class="btn btn-primary" style="padding: 12px 28px;">
+                <i class="fa-solid fa-floppy-disk"></i> Save Admin Changes
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
     </div>
 
   </div>

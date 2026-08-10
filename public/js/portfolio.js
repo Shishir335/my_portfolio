@@ -83,6 +83,31 @@ document.addEventListener('DOMContentLoaded', () => {
           if (d.statApps && appsEl) appsEl.textContent = d.statApps;
           if (d.statCrashFree && crashEl) crashEl.textContent = d.statCrashFree;
           if (d.statUsers && usersEl) usersEl.textContent = d.statUsers;
+
+          if (d.skills && Array.isArray(d.skills) && d.skills.length > 0) {
+            const skillsContainer = document.getElementById('skills-cards-container');
+            if (skillsContainer) {
+              skillsContainer.innerHTML = '';
+              d.skills.forEach(skill => {
+                const card = document.createElement('div');
+                card.className = 'skill-card';
+
+                const tagsHtml = (skill.tags || []).map(tag => `<span class="skill-tag">${tag}</span>`).join('');
+                const icon = skill.icon || 'fa-solid fa-code';
+                const color = skill.color || '#00D2FF';
+
+                card.innerHTML = `
+                  <div class="skill-icon-box" style="color: ${color}; background: ${color}1a;"><i class="${icon}"></i></div>
+                  <h3 class="skill-title">${skill.title || ''}</h3>
+                  <p class="project-desc">${skill.description || ''}</p>
+                  <div class="skill-tags">
+                    ${tagsHtml}
+                  </div>
+                `;
+                skillsContainer.appendChild(card);
+              });
+            }
+          }
         }
 
         const photoUrl = (resData.status === 'success' && resData.data && resData.data.photo)

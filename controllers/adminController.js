@@ -150,7 +150,8 @@ exports.getProfile = catchAsync(async (req, res, next) => {
                 statYearsExp: user.statYearsExp || '4+',
                 statApps: user.statApps || '25+',
                 statCrashFree: user.statCrashFree || '99.9%',
-                statUsers: user.statUsers || '100k+'
+                statUsers: user.statUsers || '100k+',
+                skills: user.skills || []
             }
         }
     });
@@ -171,6 +172,13 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
     if (req.body.statApps !== undefined) fieldsToUpdate.statApps = req.body.statApps;
     if (req.body.statCrashFree !== undefined) fieldsToUpdate.statCrashFree = req.body.statCrashFree;
     if (req.body.statUsers !== undefined) fieldsToUpdate.statUsers = req.body.statUsers;
+    if (req.body.skills !== undefined) {
+        try {
+            fieldsToUpdate.skills = typeof req.body.skills === 'string' ? JSON.parse(req.body.skills) : req.body.skills;
+        } catch (err) {
+            fieldsToUpdate.skills = req.body.skills;
+        }
+    }
 
     const updatedUser = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
         new: true,
@@ -203,7 +211,8 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
                 statYearsExp: updatedUser.statYearsExp || '4+',
                 statApps: updatedUser.statApps || '25+',
                 statCrashFree: updatedUser.statCrashFree || '99.9%',
-                statUsers: updatedUser.statUsers || '100k+'
+                statUsers: updatedUser.statUsers || '100k+',
+                skills: updatedUser.skills || []
             }
         }
     });
@@ -235,7 +244,8 @@ exports.getPublicProfile = catchAsync(async (req, res, next) => {
             statYearsExp: user && user.statYearsExp ? user.statYearsExp : '4+',
             statApps: user && user.statApps ? user.statApps : '25+',
             statCrashFree: user && user.statCrashFree ? user.statCrashFree : '99.9%',
-            statUsers: user && user.statUsers ? user.statUsers : '100k+'
+            statUsers: user && user.statUsers ? user.statUsers : '100k+',
+            skills: user && user.skills ? user.skills : []
         }
     });
 });

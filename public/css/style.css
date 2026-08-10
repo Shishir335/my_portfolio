@@ -867,7 +867,8 @@ body {
 }
 
 .admin-container {
-  max-width: 820px;
+  max-width: 1240px;
+  width: 95%;
   margin: 110px auto 60px;
   padding: 0 20px;
 }
@@ -1200,4 +1201,100 @@ body {
 .flatpickr-months .flatpickr-next-month {
   fill: var(--flutter-cyan) !important;
   color: var(--flutter-cyan) !important;
+}
+
+/* Admin Drawer Navigation System */
+.admin-drawer-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .admin-drawer-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-sidebar {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-drawer-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.admin-drawer-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+}
+
+.admin-drawer-btn.active {
+  background: rgba(1, 181, 216, 0.15);
+  border-color: rgba(1, 181, 216, 0.4);
+  color: var(--flutter-cyan);
+  font-weight: 600;
+}
+
+.admin-drawer-btn i {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.admin-tab-pane {
+  display: none;
+}
+
+.admin-tab-pane.active {
+  display: block;
+}
+
+/* Horizontal Scrollable Skills Grid on Portfolio Website */
+.skills-grid.horizontal-scroll {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 24px;
+  padding-top: 16px;
+  padding-bottom: 24px;
+  margin-top: -16px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--flutter-cyan) var(--bg-dark);
+}
+
+@media (max-width: 1080px) {
+  .skills-grid.horizontal-scroll {
+    justify-content: flex-start;
+  }
+}
+
+.skills-grid.horizontal-scroll .skill-card {
+  min-width: 320px;
+  max-width: 380px;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
 }

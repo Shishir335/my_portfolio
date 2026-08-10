@@ -1324,3 +1324,114 @@ body {
   flex: 0 0 auto;
   scroll-snap-align: start;
 }
+
+/* Job Experience & Timeline Section */
+.experience-section {
+  padding: 90px 0;
+  background: rgba(9, 13, 22, 0.4);
+}
+
+.timeline-container {
+  position: relative;
+  max-width: 860px;
+  margin: 40px auto 0;
+  padding-left: 30px;
+  border-left: 2px dashed rgba(0, 210, 255, 0.3);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -39px;
+  top: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--flutter-cyan);
+  border: 3px solid #050811;
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.8);
+}
+
+.timeline-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  transition: var(--transition);
+}
+
+.timeline-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glow);
+  box-shadow: 0 12px 30px rgba(0, 210, 255, 0.12);
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.timeline-role {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.timeline-duration {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--flutter-cyan);
+}
+
+.timeline-subheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.timeline-company {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--flutter-cyan);
+}
+
+.timeline-location {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.timeline-highlights-list {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style-type: disc;
+}
+
+.timeline-highlights-list li {
+  font-size: 0.94rem;
+  color: var(--text-main);
+  line-height: 1.65;
+}
+
+.timeline-highlights-list li::marker {
+  color: var(--flutter-cyan);
+  font-size: 1.1rem;
+}

@@ -152,7 +152,8 @@ exports.getProfile = catchAsync(async (req, res, next) => {
                 statCrashFree: user.statCrashFree || '99.9%',
                 statUsers: user.statUsers || '100k+',
                 skills: user.skills || [],
-                projects: user.projects || []
+                projects: user.projects || [],
+                experiences: user.experiences || []
             }
         }
     });
@@ -185,6 +186,13 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
             fieldsToUpdate.projects = typeof req.body.projects === 'string' ? JSON.parse(req.body.projects) : req.body.projects;
         } catch (err) {
             fieldsToUpdate.projects = req.body.projects;
+        }
+    }
+    if (req.body.experiences !== undefined) {
+        try {
+            fieldsToUpdate.experiences = typeof req.body.experiences === 'string' ? JSON.parse(req.body.experiences) : req.body.experiences;
+        } catch (err) {
+            fieldsToUpdate.experiences = req.body.experiences;
         }
     }
 
@@ -221,7 +229,8 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
                 statCrashFree: updatedUser.statCrashFree || '99.9%',
                 statUsers: updatedUser.statUsers || '100k+',
                 skills: updatedUser.skills || [],
-                projects: updatedUser.projects || []
+                projects: updatedUser.projects || [],
+                experiences: updatedUser.experiences || []
             }
         }
     });
@@ -255,7 +264,8 @@ exports.getPublicProfile = catchAsync(async (req, res, next) => {
             statCrashFree: user && user.statCrashFree ? user.statCrashFree : '99.9%',
             statUsers: user && user.statUsers ? user.statUsers : '100k+',
             skills: user && user.skills ? user.skills : [],
-            projects: user && user.projects ? user.projects : []
+            projects: user && user.projects ? user.projects : [],
+            experiences: user && user.experiences ? user.experiences : []
         }
     });
 });

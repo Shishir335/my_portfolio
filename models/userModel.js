@@ -113,6 +113,27 @@ const userSchema = new mongoose.Schema({
             }
         ]
     },
+    experiences: {
+        type: Array,
+        default: [
+            {
+                role: 'Senior Software Engineer (Mobile, Flutter)',
+                company: 'Bini Fintech Limited',
+                duration: '07/2023 - Present',
+                location: 'Dhaka, Bangladesh',
+                description: 'Leading mobile fintech architecture, security compliance, and cross-platform release management.',
+                highlights: [
+                    'Leading the Flutter development team in the development and maintenance of the Bini personal finance application, ensuring secure, scalable, and high-quality mobile solutions.',
+                    'Architecting and developing cross-platform applications using Flutter, Clean Architecture, and SOLID principles.',
+                    'Integrating REST APIs, banking APIs, payment gateways, Firebase services, and third-party SDKs to deliver seamless financial features.',
+                    'Implementing secure authentication and authorization using OAuth 2.0 while ensuring compliance with financial security standards.',
+                    'Optimizing application performance, offline data synchronization, and API communication to enhance user experience and reliability.',
+                    'Conducting code reviews, mentoring developers, and collaborating with cross-functional teams in an Agile environment.',
+                    'Managing Git workflows and publishing production releases to the Google Play Store and Apple App Store.'
+                ]
+            }
+        ]
+    },
     role: {
         type: String,
         enum: ['user', 'admin', 'dev'],

@@ -147,6 +147,11 @@ document.addEventListener('DOMContentLoaded', () => {
         currentProjects = user.projects;
         renderProjectsEditor();
       }
+
+      if (user.experiences && Array.isArray(user.experiences)) {
+        currentExperiences = user.experiences;
+        renderExperienceEditor();
+      }
     } catch (e) {
       console.error('Error populating dashboard:', e);
     }
@@ -362,6 +367,114 @@ document.addEventListener('DOMContentLoaded', () => {
     return updatedProjects;
   };
 
+  // Experience Section Editor
+  let currentExperiences = [];
+  const experienceContainer = document.getElementById('admin-experience-editor-container');
+  const addExperienceBtn = document.getElementById('add-experience-card-btn');
+
+  const renderExperienceEditor = () => {
+    if (!experienceContainer) return;
+    experienceContainer.innerHTML = '';
+
+    currentExperiences.forEach((exp, index) => {
+      const card = document.createElement('div');
+      card.style.cssText = 'background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; position: relative;';
+
+      card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--flutter-cyan);">Experience #${index + 1}</h4>
+          <button type="button" class="btn btn-sm" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px;" onclick="removeExperienceCard(${index})">
+            <i class="fa-solid fa-trash"></i> Remove
+          </button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Job Role / Title</label>
+              <input type="text" class="exp-input-role" data-index="${index}" value="${exp.role || ''}" placeholder="e.g. Senior Flutter Engineer" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Company Name</label>
+              <input type="text" class="exp-input-company" data-index="${index}" value="${exp.company || ''}" placeholder="e.g. TechCorp Solutions" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Duration / Timeline</label>
+              <input type="text" class="exp-input-duration" data-index="${index}" value="${exp.duration || ''}" placeholder="e.g. 2022 - Present" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Location</label>
+              <input type="text" class="exp-input-location" data-index="${index}" value="${exp.location || ''}" placeholder="e.g. Remote / San Francisco, CA" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+            </div>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Summary Description</label>
+            <textarea class="exp-input-desc" data-index="${index}" rows="2" placeholder="Brief summary of responsibilities..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px; resize: vertical;">${exp.description || ''}</textarea>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Key Highlights & Accomplishments (one bullet point per line)</label>
+            <textarea class="exp-input-highlights" data-index="${index}" rows="5" placeholder="Enter each bullet point on a new line..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px; resize: vertical;">${(exp.highlights || []).join('\n')}</textarea>
+          </div>
+        </div>
+      `;
+
+      experienceContainer.appendChild(card);
+    });
+  };
+
+  window.removeExperienceCard = (index) => {
+    currentExperiences.splice(index, 1);
+    renderExperienceEditor();
+  };
+
+  if (addExperienceBtn) {
+    addExperienceBtn.addEventListener('click', () => {
+      currentExperiences.push({
+        role: 'Senior Software Engineer (Mobile, Flutter)',
+        company: 'Bini Fintech Limited',
+        duration: '07/2023 - Present',
+        location: 'Dhaka, Bangladesh',
+        description: 'Describe key responsibilities and impact...',
+        highlights: ['Leading the Flutter development team...', 'Architecting and developing cross-platform applications...']
+      });
+      renderExperienceEditor();
+    });
+  }
+
+  const collectExperienceData = () => {
+    const roleInputs = document.querySelectorAll('.exp-input-role');
+    const companyInputs = document.querySelectorAll('.exp-input-company');
+    const durationInputs = document.querySelectorAll('.exp-input-duration');
+    const locationInputs = document.querySelectorAll('.exp-input-location');
+    const descInputs = document.querySelectorAll('.exp-input-desc');
+    const highlightsInputs = document.querySelectorAll('.exp-input-highlights');
+
+    const updatedExperiences = [];
+    roleInputs.forEach((input, index) => {
+      const role = input.value.trim();
+      const company = companyInputs[index] ? companyInputs[index].value.trim() : '';
+      const duration = durationInputs[index] ? durationInputs[index].value.trim() : '';
+      const location = locationInputs[index] ? locationInputs[index].value.trim() : '';
+      const description = descInputs[index] ? descInputs[index].value.trim() : '';
+      const highlightsStr = highlightsInputs[index] ? highlightsInputs[index].value : '';
+      const highlights = highlightsStr.split('\n').map(h => h.trim().replace(/^[•\-\*]\s*/, '')).filter(Boolean);
+
+      if (role) {
+        updatedExperiences.push({
+          role,
+          company,
+          duration,
+          location,
+          description,
+          highlights
+        });
+      }
+    });
+
+    return updatedExperiences;
+  };
+
   // 1. Handle Admin Login
   if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
@@ -458,6 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const skillsData = collectSkillsData();
         const projectsData = collectProjectsData();
+        const experiencesData = collectExperienceData();
 
         if (selectedPhotoFile) {
           const formData = new FormData();
@@ -474,6 +588,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (statUsersInput) formData.append('statUsers', statUsersInput.value.trim());
           formData.append('skills', JSON.stringify(skillsData));
           formData.append('projects', JSON.stringify(projectsData));
+          formData.append('experiences', JSON.stringify(experiencesData));
           formData.append('photo', selectedPhotoFile);
 
           res = await fetch('/api/v1/admin/profile', {
@@ -496,7 +611,8 @@ document.addEventListener('DOMContentLoaded', () => {
             statCrashFree: statCrashFreeInput ? statCrashFreeInput.value.trim() : '',
             statUsers: statUsersInput ? statUsersInput.value.trim() : '',
             skills: skillsData,
-            projects: projectsData
+            projects: projectsData,
+            experiences: experiencesData
           };
 
           res = await fetch('/api/v1/admin/profile', {

@@ -93,6 +93,9 @@
           <button type="button" class="admin-drawer-btn" data-tab="tab-projects">
             <i class="fa-solid fa-rocket"></i> Projects Showcase
           </button>
+          <button type="button" class="admin-drawer-btn" data-tab="tab-experience">
+            <i class="fa-solid fa-briefcase"></i> Job Experience
+          </button>
         </div>
 
         <!-- Right Content Area -->
@@ -279,6 +282,23 @@
 
               <div id="admin-projects-editor-container" style="display: flex; flex-direction: column; gap: 20px;">
                 <!-- Dynamically populated project card editors -->
+              </div>
+            </div>
+
+            <!-- TAB 5: JOB EXPERIENCE -->
+            <div id="tab-experience" class="admin-tab-pane">
+              <div class="dashboard-header" style="margin-bottom: 20px;">
+                <div>
+                  <h2><i class="fa-solid fa-briefcase gradient-icon"></i> Job Experience</h2>
+                  <p>Manage your professional career history, roles, companies, and key achievements.</p>
+                </div>
+                <button type="button" class="btn btn-outline btn-sm" id="add-experience-card-btn">
+                  <i class="fa-solid fa-plus"></i> Add Job Experience
+                </button>
+              </div>
+
+              <div id="admin-experience-editor-container" style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Dynamically populated experience card editors -->
               </div>
             </div>
 

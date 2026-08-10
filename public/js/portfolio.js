@@ -106,6 +106,37 @@ document.addEventListener('DOMContentLoaded', () => {
               });
             }
           }
+
+          if (d.experiences && Array.isArray(d.experiences) && d.experiences.length > 0) {
+            const expContainer = document.getElementById('experience-timeline-container');
+            if (expContainer) {
+              expContainer.innerHTML = '';
+              d.experiences.forEach(exp => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+
+                const highlightsHtml = (exp.highlights || []).map(h => `
+                  <li><span>${h}</span></li>
+                `).join('');
+
+                item.innerHTML = `
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-card">
+                    <div class="timeline-header">
+                      <h3 class="timeline-role">${exp.role || ''}</h3>
+                      <span class="timeline-duration">${exp.duration || ''}</span>
+                    </div>
+                    <div class="timeline-subheader">
+                      <span class="timeline-company">${exp.company || ''}</span>
+                      ${exp.location ? `<span class="timeline-location">${exp.location}</span>` : ''}
+                    </div>
+                    ${highlightsHtml ? `<ul class="timeline-highlights-list">${highlightsHtml}</ul>` : ''}
+                  </div>
+                `;
+                expContainer.appendChild(item);
+              });
+            }
+          }
         }
 
         const photoUrl = (resData.status === 'success' && resData.data && resData.data.photo)

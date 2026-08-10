@@ -248,24 +248,24 @@
             <label
               style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted);">Your
               Name</label>
-            <input type="text" placeholder="John Doe" required
+            <input type="text" id="contact-name-input" placeholder="John Doe" required
               style="width: 100%; padding: 12px; border-radius: 8px; background: #090d16; border: 1px solid var(--border-color); color: #fff;">
           </div>
           <div>
             <label
               style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted);">Your
               Email</label>
-            <input type="email" placeholder="john@example.com" required
+            <input type="email" id="contact-email-input" placeholder="john@example.com" required
               style="width: 100%; padding: 12px; border-radius: 8px; background: #090d16; border: 1px solid var(--border-color); color: #fff;">
           </div>
           <div>
             <label
               style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted);">Project
               Details / Message</label>
-            <textarea rows="4" placeholder="Tell me about your Flutter app project..." required
+            <textarea id="contact-message-input" rows="4" placeholder="Tell me about your Flutter app project..." required
               style="width: 100%; padding: 12px; border-radius: 8px; background: #090d16; border: 1px solid var(--border-color); color: #fff;"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary" style="justify-content: center; width: 100%;">
+          <button type="submit" id="contact-submit-btn" class="btn btn-primary" style="justify-content: center; width: 100%;">
             <i class="fa-solid fa-paper-plane"></i> Send Message
           </button>
         </form>

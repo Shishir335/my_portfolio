@@ -10,13 +10,50 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 2. Contact Form Submission (Toast Simulation)
+  // 2. Real Contact Form Submission
   const contactForm = document.getElementById('contact-form');
+  const nameInput = document.getElementById('contact-name-input');
+  const emailInput = document.getElementById('contact-email-input');
+  const messageInput = document.getElementById('contact-message-input');
+  const submitBtn = document.getElementById('contact-submit-btn');
+
   if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      alert('Thank you for reaching out! Your message has been sent successfully. I will get back to you shortly.');
-      contactForm.reset();
+      if (!nameInput || !emailInput || !messageInput) return;
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending Message...';
+      }
+
+      try {
+        const res = await fetch('/api/v1/admin/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: nameInput.value.trim(),
+            email: emailInput.value.trim(),
+            message: messageInput.value.trim()
+          })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.status === 'success') {
+          alert('Thank you for reaching out! Your message has been saved to the Admin Inbox.');
+          contactForm.reset();
+        } else {
+          alert(data.message || 'Failed to send message. Please try again.');
+        }
+      } catch (err) {
+        console.error('Contact form submission error:', err);
+        alert('Connection error. Please try again later.');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+        }
+      }
     });
   }
 

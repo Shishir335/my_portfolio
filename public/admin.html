@@ -96,6 +96,9 @@
           <button type="button" class="admin-drawer-btn" data-tab="tab-experience">
             <i class="fa-solid fa-briefcase"></i> Job Experience
           </button>
+          <button type="button" class="admin-drawer-btn" data-tab="tab-messages">
+            <i class="fa-solid fa-inbox"></i> Messages Inbox <span id="admin-unread-badge" style="margin-left: auto; display: none; font-size: 0.72rem; padding: 2px 8px; border-radius: 10px; background: #ef4444; color: #fff; font-weight: 700;">0</span>
+          </button>
         </div>
 
         <!-- Right Content Area -->
@@ -299,6 +302,23 @@
 
               <div id="admin-experience-editor-container" style="display: flex; flex-direction: column; gap: 20px;">
                 <!-- Dynamically populated experience card editors -->
+              </div>
+            </div>
+
+            <!-- TAB 6: MESSAGES INBOX -->
+            <div id="tab-messages" class="admin-tab-pane">
+              <div class="dashboard-header" style="margin-bottom: 20px;">
+                <div>
+                  <h2><i class="fa-solid fa-inbox gradient-icon"></i> Messages Inbox</h2>
+                  <p>Read and manage messages submitted by visitors through the 'Get In Touch' contact form.</p>
+                </div>
+                <button type="button" class="btn btn-outline btn-sm" id="refresh-messages-btn">
+                  <i class="fa-solid fa-rotate"></i> Refresh Inbox
+                </button>
+              </div>
+
+              <div id="admin-messages-container" style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Dynamically populated visitor messages -->
               </div>
             </div>
 

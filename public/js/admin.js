@@ -662,6 +662,112 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // 5. Messages Inbox Management
+  const messagesContainer = document.getElementById('admin-messages-container');
+  const refreshMessagesBtn = document.getElementById('refresh-messages-btn');
+  const unreadBadge = document.getElementById('admin-unread-badge');
+
+  const fetchContactMessages = async () => {
+    const token = getToken();
+    if (!token || !messagesContainer) return;
+
+    try {
+      const res = await fetch('/api/v1/admin/messages', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+
+      if (res.ok && data && data.data && Array.isArray(data.data.messages)) {
+        const messages = data.data.messages;
+
+        if (messages.length === 0) {
+          messagesContainer.innerHTML = `
+            <div style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
+              <i class="fa-solid fa-inbox" style="font-size: 2.5rem; margin-bottom: 12px; opacity: 0.5;"></i>
+              <p>No messages received yet. Messages submitted via the 'Get In Touch' form will appear here.</p>
+            </div>
+          `;
+          if (unreadBadge) unreadBadge.style.display = 'none';
+          return;
+        }
+
+        let unreadCount = 0;
+        messagesContainer.innerHTML = '';
+        messages.forEach(msg => {
+          if (!msg.isRead) unreadCount++;
+          const dateStr = new Date(msg.createdAt).toLocaleString();
+
+          const card = document.createElement('div');
+          card.style.cssText = `background: rgba(15, 23, 42, 0.6); border: 1px solid ${msg.isRead ? 'var(--border-color)' : 'var(--flutter-cyan)'}; border-radius: 10px; padding: 18px; position: relative; transition: all 0.2s ease;`;
+
+          card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 10px;">
+              <div>
+                <h4 style="font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 2px;">${msg.name}</h4>
+                <a href="mailto:${msg.email}" style="font-size: 0.88rem; color: var(--flutter-cyan); text-decoration: none;"><i class="fa-solid fa-envelope"></i> ${msg.email}</a>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 0.8rem; color: var(--text-muted);">${dateStr}</span>
+                <button type="button" class="btn btn-sm" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px;" onclick="deleteContactMsg('${msg._id}')">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            ${msg.subject ? `<div style="font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 8px;">Subject: ${msg.subject}</div>` : ''}
+            <div style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6; white-space: pre-wrap; background: #090d16; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">${msg.message}</div>
+          `;
+
+          messagesContainer.appendChild(card);
+        });
+
+        if (unreadBadge) {
+          if (unreadCount > 0) {
+            unreadBadge.textContent = unreadCount;
+            unreadBadge.style.display = 'inline-block';
+          } else {
+            unreadBadge.style.display = 'none';
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Fetch messages error:', err);
+    }
+  };
+
+  window.deleteContactMsg = async (id) => {
+    if (!confirm('Are you sure you want to delete this message?')) return;
+    const token = getToken();
+    if (!token) return;
+
+    try {
+      const res = await fetch(`/api/v1/admin/messages/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        showToast('Message deleted successfully', 'success');
+        fetchContactMessages();
+      } else {
+        showToast('Failed to delete message', 'error');
+      }
+    } catch (e) {
+      showToast('Error deleting message', 'error');
+    }
+  };
+
+  if (refreshMessagesBtn) {
+    refreshMessagesBtn.addEventListener('click', fetchContactMessages);
+  }
+
+  // Also fetch messages on tab switch to tab-messages
+  drawerBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.getAttribute('data-tab') === 'tab-messages') {
+        fetchContactMessages();
+      }
+    });
+  });
+
   // Initialize Auth Check
-  checkAuth();
+  checkAuth().then(() => fetchContactMessages());
 });

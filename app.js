@@ -91,4 +91,28 @@ app.all('*', (req, res, next) => {
 
 app.use(globalErrorHandler);
 
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+dotenv.config({ path: './config.env' });
+
+const DB = process.env.DATABASE ? process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD) : "mongodb+srv://mahbubshishir973:mahbubullah@cluster0.3k09t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+const { ensureDefaultAdmin } = require('./controllers/adminController');
+
+mongoose.connect(DB)
+    .then(async () => {
+        console.log('DB connection successful!');
+        await ensureDefaultAdmin();
+    })
+    .catch(err => {
+        console.error('DB Connection Warning:', err.message);
+    });
+
+const port = process.env.PORT || 10000;
+
+app.listen(port, '0.0.0.0', () => {
+    console.log(`App running on port ${port}...`);
+});
+
 module.exports = app;

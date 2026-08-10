@@ -27,6 +27,34 @@ const userSchema = new mongoose.Schema({
         enum: ['male', 'female', 'other', 'prefer-not-to-say'],
         default: 'prefer-not-to-say'
     },
+    aboutBadge: {
+        type: String,
+        default: 'Available for Senior Flutter & Mobile Engineering Roles'
+    },
+    aboutTitle: {
+        type: String,
+        default: 'Crafting 60 FPS Cross-Platform Mobile Apps'
+    },
+    aboutBio: {
+        type: String,
+        default: 'Senior Flutter & Dart Developer specializing in pixel-perfect UI, clean architecture, Riverpod/BLoC state management, and seamless Node.js REST API integrations for iOS, Android & Web.'
+    },
+    statYearsExp: {
+        type: String,
+        default: '4+'
+    },
+    statApps: {
+        type: String,
+        default: '25+'
+    },
+    statCrashFree: {
+        type: String,
+        default: '99.9%'
+    },
+    statUsers: {
+        type: String,
+        default: '100k+'
+    },
     role: {
         type: String,
         enum: ['user', 'admin', 'dev'],
@@ -57,6 +85,8 @@ const userSchema = new mongoose.Schema({
         default: true,
         select: false
     }
+}, {
+    timestamps: true
 });
 
 userSchema.pre('save', async function (next) {
@@ -82,14 +112,23 @@ userSchema.pre(/^find/, function (next) {
 });
 
 userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
-    return await bcrypt.compare(candidatePassword, userPassword);
+    if (!userPassword) return false;
+    if (userPassword.startsWith('$2a$') || userPassword.startsWith('$2b$') || userPassword.startsWith('$2y$')) {
+        try {
+            return await bcrypt.compare(candidatePassword, userPassword);
+        } catch (err) {
+            return false;
+        }
+    }
+    return candidatePassword === userPassword;
 };
 
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
     if (this.passwordChangedAt) {
         const changedTimestamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
 
-        return JWTTimestamp < changedTimestamp;
+        // 2-second grace period so tokens created immediately after password saving remain valid
+        return JWTTimestamp + 2 < changedTimestamp;
     }
 
     // false means not changed

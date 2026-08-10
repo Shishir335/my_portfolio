@@ -9,8 +9,9 @@ router.get('/login', (req, res) => res.redirect('/admin'));
 router.post('/login', adminController.loginAdmin);
 router.get('/public-profile', adminController.getPublicProfile);
 
-// Protected routes (Admin authentication required)
+// Protected routes (Admin authentication & role required)
 router.use(authController.protect);
+router.use(authController.restrictTo('admin', 'dev'));
 
 router
     .route('/profile')

@@ -55,131 +55,92 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 4. Custom Avatar Photo Upload & Persistence
+  // 4. Hero Avatar Loading with Shimmer Effect
   const heroAvatarImg = document.getElementById('hero-avatar-img');
-  const avatarFileInput = document.getElementById('avatar-file-input');
-  const uploadAvatarBtn = document.getElementById('upload-avatar-btn');
-  const resetAvatarBtn = document.getElementById('reset-avatar-btn');
-  const avatarToast = document.getElementById('avatar-toast');
+  const avatarContainer = document.getElementById('avatar-container') || (heroAvatarImg ? heroAvatarImg.parentElement : null);
 
-  if (heroAvatarImg && avatarFileInput && uploadAvatarBtn) {
-    let toastTimeout = null;
+  if (heroAvatarImg) {
+    if (avatarContainer) avatarContainer.classList.add('shimmer-loading');
+    heroAvatarImg.style.opacity = '0';
 
-    const showToast = (message, type = 'success', duration = 3000) => {
-      if (!avatarToast) return;
-      if (toastTimeout) clearTimeout(toastTimeout);
-
-      avatarToast.textContent = message;
-      avatarToast.className = `avatar-upload-toast ${type}`;
-      avatarToast.style.display = 'block';
-
-      if (duration > 0) {
-        toastTimeout = setTimeout(() => {
-          avatarToast.style.display = 'none';
-        }, duration);
-      }
-    };
-
-    const updateAvatarSrc = (src, isCustom = false) => {
-      heroAvatarImg.src = src;
-      if (resetAvatarBtn) {
-        resetAvatarBtn.style.display = isCustom ? 'flex' : 'none';
-      }
-    };
-
-    // Check cached avatar in localStorage for instant render
-    const cachedAvatar = localStorage.getItem('custom_avatar_data');
-    if (cachedAvatar) {
-      updateAvatarSrc(cachedAvatar, true);
-    }
-
-    // Fetch public profile data from server on load
     fetch('/api/v1/admin/public-profile')
       .then(res => res.json())
       .then(resData => {
         if (resData.status === 'success' && resData.data) {
-          const profile = resData.data;
-          if (profile.photo && !cachedAvatar) {
-            updateAvatarSrc(profile.photo, profile.photo !== '/img/avatar.png');
-          }
+          const d = resData.data;
+          const badgeEl = document.getElementById('hero-badge-text');
+          const titleEl = document.getElementById('hero-title-text');
+          const bioEl = document.getElementById('hero-subtitle-text');
+          const yearsEl = document.getElementById('stat-years-exp');
+          const appsEl = document.getElementById('stat-apps-count');
+          const crashEl = document.getElementById('stat-crash-free');
+          const usersEl = document.getElementById('stat-active-users');
+
+          if (d.aboutBadge && badgeEl) badgeEl.textContent = d.aboutBadge;
+          if (d.aboutTitle && titleEl) titleEl.textContent = d.aboutTitle;
+          if (d.aboutBio && bioEl) bioEl.textContent = d.aboutBio;
+          if (d.statYearsExp && yearsEl) yearsEl.textContent = d.statYearsExp;
+          if (d.statApps && appsEl) appsEl.textContent = d.statApps;
+          if (d.statCrashFree && crashEl) crashEl.textContent = d.statCrashFree;
+          if (d.statUsers && usersEl) usersEl.textContent = d.statUsers;
         }
+
+        const photoUrl = (resData.status === 'success' && resData.data && resData.data.photo)
+          ? resData.data.photo
+          : '/img/avatar.png';
+
+        // Preload image before displaying to avoid any visual flicker
+        const imgPreloader = new Image();
+        imgPreloader.src = photoUrl;
+        imgPreloader.onload = () => {
+          heroAvatarImg.src = photoUrl;
+          if (avatarContainer) avatarContainer.classList.remove('shimmer-loading');
+          heroAvatarImg.style.opacity = '1';
+        };
+        imgPreloader.onerror = () => {
+          heroAvatarImg.src = '/img/avatar.png';
+          if (avatarContainer) avatarContainer.classList.remove('shimmer-loading');
+          heroAvatarImg.style.opacity = '1';
+        };
       })
       .catch(() => {
-        // Fallback silently if offline or server API not ready
+        const fallbackUrl = '/img/avatar.png';
+        const imgPreloader = new Image();
+        imgPreloader.src = fallbackUrl;
+        imgPreloader.onload = () => {
+          heroAvatarImg.src = fallbackUrl;
+          if (avatarContainer) avatarContainer.classList.remove('shimmer-loading');
+          heroAvatarImg.style.opacity = '1';
+        };
       });
+  }
 
-    // Trigger file chooser
-    uploadAvatarBtn.addEventListener('click', () => {
-      avatarFileInput.click();
-    });
+  // 5. ScrollSpy & Navigation Indicator Update
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
 
-    // Handle file selection
-    avatarFileInput.addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
+  const updateActiveNavLink = () => {
+    let currentSectionId = '';
+    const scrollPos = window.scrollY + 220;
 
-      if (!file.type.startsWith('image/')) {
-        showToast('Please select a valid image file', 'error');
-        return;
+    sections.forEach(section => {
+      const top = section.offsetTop;
+      const height = section.offsetHeight;
+      if (scrollPos >= top && scrollPos < top + height) {
+        currentSectionId = section.getAttribute('id');
       }
-
-      showToast('Processing photo...', 'loading', 0);
-
-      // Instant client-side preview with FileReader
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        const previewUrl = event.target.result;
-        updateAvatarSrc(previewUrl, true);
-
-        // Store local copy for offline persistence
-        try {
-          localStorage.setItem('custom_avatar_data', previewUrl);
-        } catch (err) {
-          console.warn('LocalStorage quota exceeded for image data:', err);
-        }
-
-        // Upload to Express backend
-        const formData = new FormData();
-        formData.append('photo', file);
-
-        try {
-          const response = await fetch('/api/v1/upload-avatar', {
-            method: 'POST',
-            body: formData
-          });
-
-          const result = await response.json();
-          if (response.ok && result.status === 'success') {
-            showToast('Photo uploaded successfully!', 'success', 3000);
-            if (result.data && result.data.avatarUrl) {
-              updateAvatarSrc(result.data.avatarUrl, true);
-            }
-          } else {
-            showToast(result.message || 'Error saving photo to server', 'error', 4000);
-          }
-        } catch (err) {
-          showToast('Photo saved locally (server offline)', 'success', 3000);
-        }
-      };
-
-      reader.readAsDataURL(file);
     });
 
-    // Handle reset to default avatar
-    if (resetAvatarBtn) {
-      resetAvatarBtn.addEventListener('click', async () => {
-        localStorage.removeItem('custom_avatar_data');
-        updateAvatarSrc('/img/avatar.png', false);
-        avatarFileInput.value = '';
-
-        try {
-          await fetch('/api/v1/upload-avatar', { method: 'DELETE' });
-        } catch (err) {
-          // ignore network error on reset
+    if (currentSectionId) {
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${currentSectionId}`) {
+          link.classList.add('active');
         }
-
-        showToast('Restored default photo', 'success', 2500);
       });
     }
-  }
+  };
+
+  window.addEventListener('scroll', updateActiveNavLink);
+  updateActiveNavLink();
 });

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Review = require('./models/reviewModel');
 
 process.on('uncaughtException', err => {
     console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
@@ -12,10 +11,12 @@ dotenv.config({ path: './config.env' });
 
 const DB = process.env.DATABASE ? process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD) : "mongodb+srv://mahbubshishir973:mahbubullah@cluster0.3k09t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
+const { ensureDefaultAdmin } = require('./controllers/adminController');
+
 mongoose.connect(DB)
     .then(async () => {
         console.log('DB connection successful!');
-        await Review.syncIndexes().catch(err => console.error('Index sync warning:', err.message));
+        await ensureDefaultAdmin();
     })
     .catch(err => {
         console.error('DB Connection Warning:', err.message);

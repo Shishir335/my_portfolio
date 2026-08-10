@@ -33,8 +33,6 @@
         <li><a href="#projects">Projects</a></li>
         <li><a href="#api-demo">Live API</a></li>
         <li><a href="#contact">Contact</a></li>
-        <li><a href="/admin" class="nav-admin-link" style="color: var(--flutter-cyan); font-weight: 600;"><i
-              class="fa-solid fa-user-gear" style="font-size: 0.85rem; margin-right: 4px;"></i> Admin</a></li>
       </ul>
       <a href="#contact" class="btn btn-primary" id="nav-hire-btn">
         <i class="fa-solid fa-paper-plane"></i> Hire Me
@@ -47,12 +45,12 @@
     <div class="container hero-grid">
       <div class="hero-text">
         <div class="badge">
-          <span class="pulse-dot"></span> Available for Senior Flutter & Mobile Engineering Roles
+          <span class="pulse-dot"></span> <span id="hero-badge-text">Available for Senior Flutter & Mobile Engineering Roles</span>
         </div>
-        <h1 class="hero-title">
+        <h1 class="hero-title" id="hero-title-text">
           Crafting <span class="gradient-text">60 FPS</span> Cross-Platform Mobile Apps
         </h1>
-        <p class="hero-subtitle">
+        <p class="hero-subtitle" id="hero-subtitle-text">
           Senior Flutter & Dart Developer specializing in pixel-perfect UI, clean architecture, Riverpod/BLoC state
           management, and seamless Node.js REST API integrations for iOS, Android & Web.
         </p>
@@ -67,19 +65,8 @@
       </div>
       <div class="hero-image-wrapper">
         <div class="avatar-card">
-          <div class="avatar-img-container">
-            <img src="/img/avatar.png" alt="Flutter Developer Avatar" class="avatar-img" id="hero-avatar-img">
-            <input type="file" id="avatar-file-input" accept="image/*" style="display: none;">
-            <div class="avatar-overlay">
-              <button type="button" class="avatar-upload-btn" id="upload-avatar-btn">
-                <i class="fa-solid fa-camera"></i> Change Photo
-              </button>
-              <button type="button" class="avatar-reset-btn" id="reset-avatar-btn" title="Reset to default photo"
-                style="display: none;">
-                <i class="fa-solid fa-rotate-left"></i>
-              </button>
-            </div>
-            <div class="avatar-upload-toast" id="avatar-toast" style="display: none;"></div>
+          <div class="avatar-img-container shimmer-loading" id="avatar-container">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Flutter Developer Avatar" class="avatar-img" id="hero-avatar-img" style="opacity: 0; transition: opacity 0.4s ease;">
           </div>
           <!-- Floating Widget Badges -->
           <div class="floating-widget widget-1">
@@ -105,19 +92,19 @@
   <section class="stats-section">
     <div class="container stats-grid">
       <div class="stat-card">
-        <h3>4+</h3>
+        <h3 id="stat-years-exp">4+</h3>
         <p>Years Flutter Experience</p>
       </div>
       <div class="stat-card">
-        <h3>25+</h3>
+        <h3 id="stat-apps-count">25+</h3>
         <p>Published Mobile Apps</p>
       </div>
       <div class="stat-card">
-        <h3>99.9%</h3>
+        <h3 id="stat-crash-free">99.9%</h3>
         <p>Crash-Free Sessions</p>
       </div>
       <div class="stat-card">
-        <h3>100k+</h3>
+        <h3 id="stat-active-users">100k+</h3>
         <p>Active App Users</p>
       </div>
     </div>

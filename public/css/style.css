@@ -7,17 +7,17 @@
   --bg-card-hover: rgba(28, 39, 64, 0.85);
   --border-color: rgba(255, 255, 255, 0.08);
   --border-glow: rgba(2, 136, 209, 0.4);
-  
+
   --flutter-blue: #02569B;
   --flutter-cyan: #01B5D8;
   --flutter-accent: #54C5F8;
   --neon-purple: #a855f7;
   --neon-pink: #ec4899;
-  
+
   --text-main: #f3f4f6;
   --text-muted: #9ca3af;
   --text-dim: #6b7280;
-  
+
   --glass-bg: rgba(15, 23, 42, 0.65);
   --glass-border: rgba(255, 255, 255, 0.1);
   --radius-sm: 8px;
@@ -43,7 +43,7 @@ html {
 body {
   min-height: 100vh;
   position: relative;
-  background-image: 
+  background-image:
     radial-gradient(circle at 15% 15%, rgba(1, 181, 216, 0.12) 0%, transparent 40%),
     radial-gradient(circle at 85% 65%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
   background-attachment: fixed;
@@ -53,13 +53,16 @@ body {
 ::-webkit-scrollbar {
   width: 10px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--bg-dark);
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 5px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--flutter-cyan);
 }
@@ -139,7 +142,8 @@ body {
   position: relative;
 }
 
-.nav-links a:hover, .nav-links a.active {
+.nav-links a:hover,
+.nav-links a.active {
   color: var(--flutter-accent);
 }
 
@@ -155,7 +159,8 @@ body {
   border-radius: 2px;
 }
 
-.nav-links a:hover::after, .nav-links a.active::after {
+.nav-links a:hover::after,
+.nav-links a.active::after {
   width: 100%;
 }
 
@@ -235,9 +240,20 @@ body {
 }
 
 @keyframes pulse {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
 }
 
 .hero-title {
@@ -277,28 +293,61 @@ body {
 
 .avatar-card {
   position: relative;
+  width: 420px;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
   border-radius: var(--radius-lg);
   padding: 12px;
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
   border: 1px solid var(--glass-border);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  box-sizing: border-box;
 }
 
 .avatar-img-container {
   position: relative;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1;
   border-radius: var(--radius-md);
   overflow: hidden;
   display: block;
 }
 
+/* Shimmer Skeleton Loading */
+.avatar-img-container.shimmer-loading {
+  background: linear-gradient(90deg,
+      rgba(15, 23, 42, 0.9) 0%,
+      rgba(30, 41, 59, 0.9) 20%,
+      rgba(51, 65, 85, 0.9) 40%,
+      rgba(30, 41, 59, 0.9) 60%,
+      rgba(15, 23, 42, 0.9) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 .avatar-img {
   width: 100%;
-  max-width: 420px;
+  height: 100%;
   border-radius: var(--radius-md);
   display: block;
   object-fit: cover;
   aspect-ratio: 1 / 1;
-  transition: filter 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.4s ease, filter 0.3s ease, transform 0.3s ease;
 }
 
 .avatar-img-container:hover .avatar-img {
@@ -434,8 +483,15 @@ body {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .widget-icon {
@@ -711,10 +767,24 @@ body {
   display: flex;
   gap: 6px;
 }
-.dot { width: 10px; height: 10px; border-radius: 50%; }
-.dot-red { background: #ef4444; }
-.dot-yellow { background: #f59e0b; }
-.dot-green { background: #10b981; }
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot-red {
+  background: #ef4444;
+}
+
+.dot-yellow {
+  background: #f59e0b;
+}
+
+.dot-green {
+  background: #10b981;
+}
 
 .code-block {
   background: #060911;
@@ -1057,16 +1127,77 @@ body {
 
 /* Responsive */
 @media (max-width: 992px) {
-  .hero-grid, .api-box { grid-template-columns: 1fr; }
-  .hero-title { font-size: 2.8rem; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .form-grid { grid-template-columns: 1fr; }
+
+  .hero-grid,
+  .api-box {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-title {
+    font-size: 2.8rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 768px) {
-  .nav-links { display: none; }
-  .hero-title { font-size: 2.2rem; }
-  .stats-grid { grid-template-columns: 1fr; }
-  .photo-upload-container { flex-direction: column; text-align: center; }
-  .dashboard-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .nav-links {
+    display: none;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .photo-upload-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+/* Flatpickr Datepicker Customization */
+.flatpickr-calendar {
+  background: #0f172a !important;
+  border: 1px solid var(--border-glow) !important;
+  box-shadow: 0 15px 35px rgba(0, 210, 255, 0.2) !important;
+  border-radius: var(--radius-md) !important;
+  font-family: inherit !important;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected:focus,
+.flatpickr-day.selected:hover {
+  background: var(--flutter-blue) !important;
+  border-color: var(--flutter-cyan) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+.flatpickr-day:hover {
+  background: rgba(0, 210, 255, 0.15) !important;
+}
+
+.flatpickr-months .flatpickr-month,
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month {
+  fill: var(--flutter-cyan) !important;
+  color: var(--flutter-cyan) !important;
 }

@@ -142,6 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
         currentSkills = user.skills;
         renderSkillsEditor();
       }
+
+      if (user.projects && Array.isArray(user.projects)) {
+        currentProjects = user.projects;
+        renderProjectsEditor();
+      }
     } catch (e) {
       console.error('Error populating dashboard:', e);
     }
@@ -247,6 +252,116 @@ document.addEventListener('DOMContentLoaded', () => {
     return updatedSkills;
   };
 
+  // Projects Section Editor
+  let currentProjects = [];
+  const projectsContainer = document.getElementById('admin-projects-editor-container');
+  const addProjectBtn = document.getElementById('add-project-card-btn');
+
+  const renderProjectsEditor = () => {
+    if (!projectsContainer) return;
+    projectsContainer.innerHTML = '';
+
+    currentProjects.forEach((proj, index) => {
+      const card = document.createElement('div');
+      card.style.cssText = 'background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; position: relative;';
+
+      card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--flutter-cyan);">Project Card #${index + 1}</h4>
+          <button type="button" class="btn btn-sm" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px;" onclick="removeProjectCard(${index})">
+            <i class="fa-solid fa-trash"></i> Remove
+          </button>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Title</label>
+              <input type="text" class="proj-input-title" data-index="${index}" value="${proj.title || ''}" placeholder="e.g. CryptoPulse Dashboard" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Category / Badge</label>
+              <input type="text" class="proj-input-badge" data-index="${index}" value="${proj.badge || ''}" placeholder="e.g. Flutter & Web" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+            </div>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Description</label>
+            <textarea class="proj-input-desc" data-index="${index}" rows="2" placeholder="Describe key features & tech stack..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px; resize: vertical;">${proj.description || ''}</textarea>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted);">Tags (comma separated)</label>
+            <input type="text" class="proj-input-tags" data-index="${index}" value="${(proj.tags || []).join(', ')}" placeholder="e.g. Flutter 3.x, Riverpod, WebSockets" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label style="font-size: 0.8rem; color: var(--text-muted);">GitHub Repo URL</label>
+              <input type="text" class="proj-input-github" data-index="${index}" value="${proj.githubLink || ''}" placeholder="https://github.com/..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; color: var(--text-muted);">Live Demo / Store URL</label>
+              <input type="text" class="proj-input-demo" data-index="${index}" value="${proj.demoLink || ''}" placeholder="https://..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+            </div>
+          </div>
+        </div>
+      `;
+
+      projectsContainer.appendChild(card);
+    });
+  };
+
+  window.removeProjectCard = (index) => {
+    currentProjects.splice(index, 1);
+    renderProjectsEditor();
+  };
+
+  if (addProjectBtn) {
+    addProjectBtn.addEventListener('click', () => {
+      currentProjects.push({
+        title: 'New Featured Project',
+        badge: 'Mobile App',
+        description: 'Describe application architecture and features...',
+        image: '/img/app_showcase.png',
+        tags: ['Flutter', 'Riverpod'],
+        githubLink: 'https://github.com/Shishir335',
+        demoLink: 'https://github.com/Shishir335'
+      });
+      renderProjectsEditor();
+    });
+  }
+
+  const collectProjectsData = () => {
+    const titleInputs = document.querySelectorAll('.proj-input-title');
+    const badgeInputs = document.querySelectorAll('.proj-input-badge');
+    const descInputs = document.querySelectorAll('.proj-input-desc');
+    const tagsInputs = document.querySelectorAll('.proj-input-tags');
+    const githubInputs = document.querySelectorAll('.proj-input-github');
+    const demoInputs = document.querySelectorAll('.proj-input-demo');
+
+    const updatedProjects = [];
+    titleInputs.forEach((input, index) => {
+      const title = input.value.trim();
+      const badge = badgeInputs[index] ? badgeInputs[index].value.trim() : 'Mobile App';
+      const description = descInputs[index] ? descInputs[index].value.trim() : '';
+      const tagsStr = tagsInputs[index] ? tagsInputs[index].value : '';
+      const tags = tagsStr.split(',').map(t => t.trim()).filter(Boolean);
+      const githubLink = githubInputs[index] ? githubInputs[index].value.trim() : '';
+      const demoLink = demoInputs[index] ? demoInputs[index].value.trim() : '';
+
+      if (title) {
+        updatedProjects.push({
+          title,
+          badge,
+          description,
+          image: currentProjects[index]?.image || '/img/app_showcase.png',
+          tags,
+          githubLink,
+          demoLink
+        });
+      }
+    });
+
+    return updatedProjects;
+  };
+
   // 1. Handle Admin Login
   if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
@@ -342,6 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const genderVal = genderInput ? genderInput.value : 'prefer-not-to-say';
 
         const skillsData = collectSkillsData();
+        const projectsData = collectProjectsData();
 
         if (selectedPhotoFile) {
           const formData = new FormData();
@@ -357,6 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (statCrashFreeInput) formData.append('statCrashFree', statCrashFreeInput.value.trim());
           if (statUsersInput) formData.append('statUsers', statUsersInput.value.trim());
           formData.append('skills', JSON.stringify(skillsData));
+          formData.append('projects', JSON.stringify(projectsData));
           formData.append('photo', selectedPhotoFile);
 
           res = await fetch('/api/v1/admin/profile', {
@@ -378,7 +495,8 @@ document.addEventListener('DOMContentLoaded', () => {
             statApps: statAppsInput ? statAppsInput.value.trim() : '',
             statCrashFree: statCrashFreeInput ? statCrashFreeInput.value.trim() : '',
             statUsers: statUsersInput ? statUsersInput.value.trim() : '',
-            skills: skillsData
+            skills: skillsData,
+            projects: projectsData
           };
 
           res = await fetch('/api/v1/admin/profile', {

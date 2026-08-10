@@ -90,6 +90,9 @@
           <button type="button" class="admin-drawer-btn" data-tab="tab-skills">
             <i class="fa-solid fa-laptop-code"></i> Skills & Tech Stack
           </button>
+          <button type="button" class="admin-drawer-btn" data-tab="tab-projects">
+            <i class="fa-solid fa-rocket"></i> Projects Showcase
+          </button>
         </div>
 
         <!-- Right Content Area -->
@@ -259,6 +262,23 @@
 
               <div id="admin-skills-editor-container" style="display: flex; flex-direction: column; gap: 20px;">
                 <!-- Dynamically populated skill card editors -->
+              </div>
+            </div>
+
+            <!-- TAB 4: PROJECTS SHOWCASE -->
+            <div id="tab-projects" class="admin-tab-pane">
+              <div class="dashboard-header" style="margin-bottom: 20px;">
+                <div>
+                  <h2><i class="fa-solid fa-rocket gradient-icon"></i> Projects Showcase</h2>
+                  <p>Manage your featured mobile applications and web engineering projects.</p>
+                </div>
+                <button type="button" class="btn btn-outline btn-sm" id="add-project-card-btn">
+                  <i class="fa-solid fa-plus"></i> Add Project Card
+                </button>
+              </div>
+
+              <div id="admin-projects-editor-container" style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Dynamically populated project card editors -->
               </div>
             </div>
 

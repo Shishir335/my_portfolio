@@ -151,7 +151,8 @@ exports.getProfile = catchAsync(async (req, res, next) => {
                 statApps: user.statApps || '25+',
                 statCrashFree: user.statCrashFree || '99.9%',
                 statUsers: user.statUsers || '100k+',
-                skills: user.skills || []
+                skills: user.skills || [],
+                projects: user.projects || []
             }
         }
     });
@@ -177,6 +178,13 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
             fieldsToUpdate.skills = typeof req.body.skills === 'string' ? JSON.parse(req.body.skills) : req.body.skills;
         } catch (err) {
             fieldsToUpdate.skills = req.body.skills;
+        }
+    }
+    if (req.body.projects !== undefined) {
+        try {
+            fieldsToUpdate.projects = typeof req.body.projects === 'string' ? JSON.parse(req.body.projects) : req.body.projects;
+        } catch (err) {
+            fieldsToUpdate.projects = req.body.projects;
         }
     }
 
@@ -212,7 +220,8 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
                 statApps: updatedUser.statApps || '25+',
                 statCrashFree: updatedUser.statCrashFree || '99.9%',
                 statUsers: updatedUser.statUsers || '100k+',
-                skills: updatedUser.skills || []
+                skills: updatedUser.skills || [],
+                projects: updatedUser.projects || []
             }
         }
     });
@@ -245,7 +254,8 @@ exports.getPublicProfile = catchAsync(async (req, res, next) => {
             statApps: user && user.statApps ? user.statApps : '25+',
             statCrashFree: user && user.statCrashFree ? user.statCrashFree : '99.9%',
             statUsers: user && user.statUsers ? user.statUsers : '100k+',
-            skills: user && user.skills ? user.skills : []
+            skills: user && user.skills ? user.skills : [],
+            projects: user && user.projects ? user.projects : []
         }
     });
 });

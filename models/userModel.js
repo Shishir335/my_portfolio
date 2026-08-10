@@ -81,6 +81,38 @@ const userSchema = new mongoose.Schema({
             }
         ]
     },
+    projects: {
+        type: Array,
+        default: [
+            {
+                title: 'CryptoPulse - Real-time Trading Dashboard',
+                badge: 'Flutter & Web',
+                description: 'High-frequency crypto market tracker featuring 120 FPS WebSocket candlestick charts, portfolio analytics, and biometrics authentication.',
+                image: '/img/app_showcase.png',
+                tags: ['Flutter 3.x', 'Riverpod', 'WebSockets', 'Node.js'],
+                githubLink: 'https://github.com/Shishir335',
+                demoLink: 'https://github.com/Shishir335'
+            },
+            {
+                title: 'HealthHub - Telemedicine & Vital Sync',
+                badge: 'Mobile App',
+                description: 'Cross-platform mobile application providing HIPAA-compliant video consultations, Bluetooth medical device data sync, and instant prescription delivery.',
+                image: '/img/app_showcase.png',
+                tags: ['Flutter', 'flutter_bloc', 'Firebase', 'WebRTC'],
+                githubLink: 'https://github.com/Shishir335',
+                demoLink: 'https://github.com/Shishir335'
+            },
+            {
+                title: 'LogiTrack - Enterprise Fleet Management',
+                badge: 'Enterprise System',
+                description: 'Real-time GPS fleet tracking application with offline route calculation, driver safety metrics, and automated background sync.',
+                image: '/img/app_showcase.png',
+                tags: ['Flutter', 'Google Maps API', 'Express', 'MongoDB'],
+                githubLink: 'https://github.com/Shishir335',
+                demoLink: 'https://github.com/Shishir335'
+            }
+        ]
+    },
     role: {
         type: String,
         enum: ['user', 'admin', 'dev'],

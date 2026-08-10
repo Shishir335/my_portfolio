@@ -10,42 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 2. Interactive API Tester
-  const apiBtn = document.getElementById('test-api-btn');
-  const apiCodeDisplay = document.getElementById('api-code-output');
-  const endpointSelect = document.getElementById('api-endpoint-select');
-  const apiStatusBadge = document.getElementById('api-status-badge');
-
-  if (apiBtn && apiCodeDisplay) {
-    apiBtn.addEventListener('click', async () => {
-      const endpoint = endpointSelect ? endpointSelect.value : '/api/v1/admin/public-profile';
-      apiCodeDisplay.textContent = `// Fetching data from ${endpoint}...\nLoading...`;
-
-      try {
-        const startTime = performance.now();
-        const response = await fetch(endpoint);
-        const data = await response.json();
-        const duration = Math.round(performance.now() - startTime);
-
-        if (apiStatusBadge) {
-          apiStatusBadge.textContent = `200 OK (${duration}ms)`;
-          apiStatusBadge.style.background = 'rgba(16, 185, 129, 0.2)';
-          apiStatusBadge.style.color = '#10b981';
-        }
-
-        apiCodeDisplay.textContent = JSON.stringify(data, null, 2);
-      } catch (err) {
-        if (apiStatusBadge) {
-          apiStatusBadge.textContent = `Error`;
-          apiStatusBadge.style.background = 'rgba(239, 68, 68, 0.2)';
-          apiStatusBadge.style.color = '#ef4444';
-        }
-        apiCodeDisplay.textContent = `// Failed to fetch endpoint\n${err.message}`;
-      }
-    });
-  }
-
-  // 3. Contact Form Submission (Toast Simulation)
+  // 2. Contact Form Submission (Toast Simulation)
   const contactForm = document.getElementById('contact-form');
   if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
@@ -105,6 +70,39 @@ document.addEventListener('DOMContentLoaded', () => {
                   </div>
                 `;
                 skillsContainer.appendChild(card);
+              });
+            }
+          }
+
+          if (d.projects && Array.isArray(d.projects) && d.projects.length > 0) {
+            const projectsContainer = document.getElementById('projects-cards-container');
+            if (projectsContainer) {
+              projectsContainer.innerHTML = '';
+              d.projects.forEach(proj => {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+
+                const tagsHtml = (proj.tags || []).map(tag => `<span class="tech-badge">${tag}</span>`).join('');
+                const img = proj.image || '/img/app_showcase.png';
+                const demoLink = proj.demoLink || proj.githubLink || '#';
+
+                card.innerHTML = `
+                  <div class="project-img-wrapper">
+                    <img src="${img}" alt="${proj.title || 'Project'}" class="project-img">
+                    <div class="project-overlay">
+                      <a href="${demoLink}" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-solid fa-eye"></i> View Project</a>
+                    </div>
+                  </div>
+                  <div class="project-info">
+                    <span class="project-category">${proj.badge || 'Mobile App'}</span>
+                    <h3 class="project-name">${proj.title || ''}</h3>
+                    <p class="project-desc">${proj.description || ''}</p>
+                    <div class="project-tech">
+                      ${tagsHtml}
+                    </div>
+                  </div>
+                `;
+                projectsContainer.appendChild(card);
               });
             }
           }

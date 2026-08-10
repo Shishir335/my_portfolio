@@ -26,14 +26,11 @@ const app = require('./app');
 
 const port = process.env.PORT || 3000;
 
-const server = app.listen(port, () => {
+const server = app.listen(port, '0.0.0.0', () => {
     console.log(`App running on port ${port}...`);
 });
 
 process.on('unhandledRejection', err => {
-    console.log('UNHANDLED REJECTION! 💥 Shutting down...');
-    console.log(err.name, err.message, err.stack);
-    server.close(() => {
-        process.exit(1);
-    });
+    console.log('UNHANDLED REJECTION! 💥 Logged error:');
+    console.log(err ? (err.stack || err.message || err) : 'Unknown rejection');
 });

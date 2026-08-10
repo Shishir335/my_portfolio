@@ -1,7 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
-const sharp = require('sharp');
+let sharp;
+try {
+    sharp = require('sharp');
+} catch (e) {
+    sharp = null;
+}
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
@@ -70,11 +75,19 @@ exports.resizeProfilePhoto = catchAsync(async (req, res, next) => {
     const filename = 'custom-avatar.jpg';
     const filePath = path.join(targetDir, filename);
 
-    await sharp(req.file.buffer)
-        .resize(600, 600, { fit: 'cover', position: 'center' })
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(filePath);
+    if (sharp) {
+        try {
+            await sharp(req.file.buffer)
+                .resize(600, 600, { fit: 'cover', position: 'center' })
+                .toFormat('jpeg')
+                .jpeg({ quality: 90 })
+                .toFile(filePath);
+        } catch (sharpErr) {
+            fs.writeFileSync(filePath, req.file.buffer);
+        }
+    } else {
+        fs.writeFileSync(filePath, req.file.buffer);
+    }
 
     req.body.photo = `/img/users/${filename}?t=${Date.now()}`;
     next();

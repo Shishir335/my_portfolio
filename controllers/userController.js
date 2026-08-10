@@ -1,5 +1,11 @@
+const fs = require('fs');
 const multer = require('multer');
-const sharp = require('sharp');
+let sharp;
+try {
+    sharp = require('sharp');
+} catch (e) {
+    sharp = null;
+}
 const User = require("../models/userModel");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
@@ -25,12 +31,21 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
     if (!req.file) return next();
 
     req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+    const targetPath = `public/img/users/${req.file.filename}`;
 
-    await sharp(req.file.buffer)
-        .resize(500, 500)
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(`public/img/users/${req.file.filename}`);
+    if (sharp) {
+        try {
+            await sharp(req.file.buffer)
+                .resize(500, 500)
+                .toFormat('jpeg')
+                .jpeg({ quality: 90 })
+                .toFile(targetPath);
+        } catch (err) {
+            fs.writeFileSync(targetPath, req.file.buffer);
+        }
+    } else {
+        fs.writeFileSync(targetPath, req.file.buffer);
+    }
 
     next();
 });

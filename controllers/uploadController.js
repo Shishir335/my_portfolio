@@ -1,7 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
-const sharp = require('sharp');
+let sharp;
+try {
+    sharp = require('sharp');
+} catch (e) {
+    sharp = null;
+}
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
@@ -34,14 +39,22 @@ exports.resizeAvatarPhoto = catchAsync(async (req, res, next) => {
     const filename = 'custom-avatar.jpg';
     const filePath = path.join(targetDir, filename);
 
-    await sharp(req.file.buffer)
-        .resize(600, 600, {
-            fit: 'cover',
-            position: 'center'
-        })
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(filePath);
+    if (sharp) {
+        try {
+            await sharp(req.file.buffer)
+                .resize(600, 600, {
+                    fit: 'cover',
+                    position: 'center'
+                })
+                .toFormat('jpeg')
+                .jpeg({ quality: 90 })
+                .toFile(filePath);
+        } catch (err) {
+            fs.writeFileSync(filePath, req.file.buffer);
+        }
+    } else {
+        fs.writeFileSync(filePath, req.file.buffer);
+    }
 
     req.avatarUrl = `/img/users/${filename}?t=${Date.now()}`;
     next();

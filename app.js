@@ -91,8 +91,4 @@ app.all('*', (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-if (require.main === module) {
-    require('./server');
-}
-
 module.exports = app;

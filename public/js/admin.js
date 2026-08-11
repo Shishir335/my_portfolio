@@ -214,12 +214,14 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.removeSkillCard = (index) => {
+    currentSkills = collectSkillsData(true);
     currentSkills.splice(index, 1);
     renderSkillsEditor();
   };
 
   if (addSkillBtn) {
     addSkillBtn.addEventListener('click', () => {
+      currentSkills = collectSkillsData(true);
       currentSkills.push({
         title: 'New Skill Focus',
         description: 'Describe your expertise in this category...',
@@ -231,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const collectSkillsData = () => {
+  const collectSkillsData = (includeAll = false) => {
     const titleInputs = document.querySelectorAll('.skill-input-title');
     const descInputs = document.querySelectorAll('.skill-input-desc');
     const tagsInputs = document.querySelectorAll('.skill-input-tags');
@@ -243,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const tagsStr = tagsInputs[index] ? tagsInputs[index].value : '';
       const tags = tagsStr.split(',').map(t => t.trim()).filter(Boolean);
 
-      if (title) {
+      if (includeAll || title) {
         updatedSkills.push({
           title,
           description,
@@ -314,12 +316,14 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.removeProjectCard = (index) => {
+    currentProjects = collectProjectsData(true);
     currentProjects.splice(index, 1);
     renderProjectsEditor();
   };
 
   if (addProjectBtn) {
     addProjectBtn.addEventListener('click', () => {
+      currentProjects = collectProjectsData(true);
       currentProjects.push({
         title: 'New Featured Project',
         badge: 'Mobile App',
@@ -333,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const collectProjectsData = () => {
+  const collectProjectsData = (includeAll = false) => {
     const titleInputs = document.querySelectorAll('.proj-input-title');
     const badgeInputs = document.querySelectorAll('.proj-input-badge');
     const descInputs = document.querySelectorAll('.proj-input-desc');
@@ -351,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const githubLink = githubInputs[index] ? githubInputs[index].value.trim() : '';
       const demoLink = demoInputs[index] ? demoInputs[index].value.trim() : '';
 
-      if (title) {
+      if (includeAll || title) {
         updatedProjects.push({
           title,
           badge,
@@ -424,12 +428,14 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   window.removeExperienceCard = (index) => {
+    currentExperiences = collectExperienceData(true);
     currentExperiences.splice(index, 1);
     renderExperienceEditor();
   };
 
   if (addExperienceBtn) {
     addExperienceBtn.addEventListener('click', () => {
+      currentExperiences = collectExperienceData(true);
       currentExperiences.push({
         role: 'Senior Software Engineer (Mobile, Flutter)',
         company: 'Bini Fintech Limited',
@@ -442,7 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const collectExperienceData = () => {
+  const collectExperienceData = (includeAll = false) => {
     const roleInputs = document.querySelectorAll('.exp-input-role');
     const companyInputs = document.querySelectorAll('.exp-input-company');
     const durationInputs = document.querySelectorAll('.exp-input-duration');
@@ -460,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const highlightsStr = highlightsInputs[index] ? highlightsInputs[index].value : '';
       const highlights = highlightsStr.split('\n').map(h => h.trim().replace(/^[•\-\*]\s*/, '')).filter(Boolean);
 
-      if (role) {
+      if (includeAll || role) {
         updatedExperiences.push({
           role,
           company,

@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--flutter-cyan);">Skill Card #${index + 1}</h4>
-          <button type="button" class="btn btn-sm btn-remove-skill" data-index="${index}" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px; cursor: pointer;">
+          <button type="button" class="btn btn-sm btn-remove-skill" data-index="${index}" onclick="removeSkillCard(${index})" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px; cursor: pointer;">
             <i class="fa-solid fa-trash"></i> Remove
           </button>
         </div>
@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--flutter-cyan);">Project Card #${index + 1}</h4>
-          <button type="button" class="btn btn-sm btn-remove-project" data-index="${index}" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px; cursor: pointer;">
+          <button type="button" class="btn btn-sm btn-remove-project" data-index="${index}" onclick="removeProjectCard(${index})" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px; cursor: pointer;">
             <i class="fa-solid fa-trash"></i> Remove
           </button>
         </div>
@@ -423,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--flutter-cyan);">Experience #${index + 1}</h4>
-          <button type="button" class="btn btn-sm btn-remove-exp" data-index="${index}" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px; cursor: pointer;">
+          <button type="button" class="btn btn-sm btn-remove-exp" data-index="${index}" onclick="removeExperienceCard(${index})" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px; cursor: pointer;">
             <i class="fa-solid fa-trash"></i> Remove
           </button>
         </div>

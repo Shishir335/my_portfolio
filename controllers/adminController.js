@@ -70,29 +70,22 @@ exports.resizeProfilePhoto = catchAsync(async (req, res, next) => {
     // 1) Handle Avatar Photo if provided
     const avatarFile = req.files.find(f => f.fieldname === 'photo');
     if (avatarFile) {
-        const targetDir = path.join(__dirname, '..', 'public', 'img', 'users');
-        if (!fs.existsSync(targetDir)) {
-            fs.mkdirSync(targetDir, { recursive: true });
-        }
-
-        const filename = 'custom-avatar.jpg';
-        const filePath = path.join(targetDir, filename);
-
-        if (sharp) {
-            try {
-                await sharp(avatarFile.buffer)
-                    .resize(600, 600, { fit: 'cover', position: 'center' })
+        try {
+            let base64Photo = '';
+            if (sharp) {
+                const buffer = await sharp(avatarFile.buffer)
+                    .resize(500, 500, { fit: 'cover', position: 'center' })
                     .toFormat('jpeg')
-                    .jpeg({ quality: 90 })
-                    .toFile(filePath);
-            } catch (sharpErr) {
-                fs.writeFileSync(filePath, avatarFile.buffer);
+                    .jpeg({ quality: 80 })
+                    .toBuffer();
+                base64Photo = `data:image/jpeg;base64,${buffer.toString('base64')}`;
+            } else {
+                base64Photo = `data:${avatarFile.mimetype};base64,${avatarFile.buffer.toString('base64')}`;
             }
-        } else {
-            fs.writeFileSync(filePath, avatarFile.buffer);
+            req.body.photo = base64Photo;
+        } catch (err) {
+            console.error('Error processing avatar:', err);
         }
-
-        req.body.photo = `/img/users/${filename}?t=${Date.now()}`;
     }
 
     // 2) Handle Project Image Uploads
@@ -107,32 +100,25 @@ exports.resizeProfilePhoto = catchAsync(async (req, res, next) => {
             }
         }
 
-        const productsDir = path.join(__dirname, '..', 'public', 'img', 'products');
-        if (!fs.existsSync(productsDir)) {
-            fs.mkdirSync(productsDir, { recursive: true });
-        }
-
         for (const file of projectFiles) {
             const index = parseInt(file.fieldname.replace('project_image_', ''), 10);
             if (!isNaN(index) && projects[index]) {
-                const filename = `project-${Date.now()}-${index}.jpg`;
-                const filePath = path.join(productsDir, filename);
-
-                if (sharp) {
-                    try {
-                        await sharp(file.buffer)
-                            .resize(1000, 650, { fit: 'cover' })
+                try {
+                    let base64Image = '';
+                    if (sharp) {
+                        const buffer = await sharp(file.buffer)
+                            .resize(800, 520, { fit: 'cover' })
                             .toFormat('jpeg')
-                            .jpeg({ quality: 85 })
-                            .toFile(filePath);
-                    } catch (e) {
-                        fs.writeFileSync(filePath, file.buffer);
+                            .jpeg({ quality: 80 })
+                            .toBuffer();
+                        base64Image = `data:image/jpeg;base64,${buffer.toString('base64')}`;
+                    } else {
+                        base64Image = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
                     }
-                } else {
-                    fs.writeFileSync(filePath, file.buffer);
+                    projects[index].image = base64Image;
+                } catch (err) {
+                    console.error('Error processing project image:', err);
                 }
-
-                projects[index].image = `/img/products/${filename}?t=${Date.now()}`;
             }
         }
 

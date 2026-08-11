@@ -173,6 +173,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  const escapeHtml = (str) => {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  };
+
   // Skills Section Editor
   let currentSkills = [];
   const skillsContainer = document.getElementById('admin-skills-editor-container');
@@ -189,22 +199,22 @@ document.addEventListener('DOMContentLoaded', () => {
       card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--flutter-cyan);">Skill Card #${index + 1}</h4>
-          <button type="button" class="btn btn-sm" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px;" onclick="removeSkillCard(${index})">
+          <button type="button" class="btn btn-sm btn-remove-skill" data-index="${index}" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px; cursor: pointer;">
             <i class="fa-solid fa-trash"></i> Remove
           </button>
         </div>
         <div style="display: flex; flex-direction: column; gap: 12px;">
           <div>
             <label style="font-size: 0.8rem; color: var(--text-muted);">Title</label>
-            <input type="text" class="skill-input-title" data-index="${index}" value="${skill.title || ''}" placeholder="e.g. Flutter & Dart Core" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+            <input type="text" class="skill-input-title" data-index="${index}" value="${escapeHtml(skill.title || '')}" placeholder="e.g. Flutter & Dart Core" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
           </div>
           <div>
             <label style="font-size: 0.8rem; color: var(--text-muted);">Description</label>
-            <textarea class="skill-input-desc" data-index="${index}" rows="2" placeholder="Describe key mastery focus..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px; resize: vertical;">${skill.description || ''}</textarea>
+            <textarea class="skill-input-desc" data-index="${index}" rows="2" placeholder="Describe key mastery focus..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px; resize: vertical;">${escapeHtml(skill.description || '')}</textarea>
           </div>
           <div>
             <label style="font-size: 0.8rem; color: var(--text-muted);">Tags (comma separated)</label>
-            <input type="text" class="skill-input-tags" data-index="${index}" value="${(skill.tags || []).join(', ')}" placeholder="e.g. Flutter 3.x, Dart 3, Isolates" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+            <input type="text" class="skill-input-tags" data-index="${index}" value="${escapeHtml((skill.tags || []).join(', '))}" placeholder="e.g. Flutter 3.x, Dart 3, Isolates" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
           </div>
         </div>
       `;
@@ -213,11 +223,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  window.removeSkillCard = (index) => {
+  const removeSkillCard = (index) => {
     currentSkills = collectSkillsData(true);
     currentSkills.splice(index, 1);
     renderSkillsEditor();
   };
+  window.removeSkillCard = removeSkillCard;
+
+  if (skillsContainer) {
+    skillsContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-remove-skill');
+      if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const idx = parseInt(btn.getAttribute('data-index'), 10);
+        if (!isNaN(idx)) removeSkillCard(idx);
+      }
+    });
+  }
 
   if (addSkillBtn) {
     addSkillBtn.addEventListener('click', () => {
@@ -275,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--flutter-cyan);">Project Card #${index + 1}</h4>
-          <button type="button" class="btn btn-sm" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px;" onclick="removeProjectCard(${index})">
+          <button type="button" class="btn btn-sm btn-remove-project" data-index="${index}" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px; cursor: pointer;">
             <i class="fa-solid fa-trash"></i> Remove
           </button>
         </div>
@@ -283,29 +306,29 @@ document.addEventListener('DOMContentLoaded', () => {
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
             <div>
               <label style="font-size: 0.8rem; color: var(--text-muted);">Title</label>
-              <input type="text" class="proj-input-title" data-index="${index}" value="${proj.title || ''}" placeholder="e.g. CryptoPulse Dashboard" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+              <input type="text" class="proj-input-title" data-index="${index}" value="${escapeHtml(proj.title || '')}" placeholder="e.g. CryptoPulse Dashboard" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
             </div>
             <div>
               <label style="font-size: 0.8rem; color: var(--text-muted);">Category / Badge</label>
-              <input type="text" class="proj-input-badge" data-index="${index}" value="${proj.badge || ''}" placeholder="e.g. Flutter & Web" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+              <input type="text" class="proj-input-badge" data-index="${index}" value="${escapeHtml(proj.badge || '')}" placeholder="e.g. Flutter & Web" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
             </div>
           </div>
           <div>
             <label style="font-size: 0.8rem; color: var(--text-muted);">Description</label>
-            <textarea class="proj-input-desc" data-index="${index}" rows="2" placeholder="Describe key features & tech stack..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px; resize: vertical;">${proj.description || ''}</textarea>
+            <textarea class="proj-input-desc" data-index="${index}" rows="2" placeholder="Describe key features & tech stack..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px; resize: vertical;">${escapeHtml(proj.description || '')}</textarea>
           </div>
           <div>
             <label style="font-size: 0.8rem; color: var(--text-muted);">Tags (comma separated)</label>
-            <input type="text" class="proj-input-tags" data-index="${index}" value="${(proj.tags || []).join(', ')}" placeholder="e.g. Flutter 3.x, Riverpod, WebSockets" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+            <input type="text" class="proj-input-tags" data-index="${index}" value="${escapeHtml((proj.tags || []).join(', '))}" placeholder="e.g. Flutter 3.x, Riverpod, WebSockets" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
             <div>
               <label style="font-size: 0.8rem; color: var(--text-muted);">GitHub Repo URL</label>
-              <input type="text" class="proj-input-github" data-index="${index}" value="${proj.githubLink || ''}" placeholder="https://github.com/..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+              <input type="text" class="proj-input-github" data-index="${index}" value="${escapeHtml(proj.githubLink || '')}" placeholder="https://github.com/..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
             </div>
             <div>
               <label style="font-size: 0.8rem; color: var(--text-muted);">Live Demo / Store URL</label>
-              <input type="text" class="proj-input-demo" data-index="${index}" value="${proj.demoLink || ''}" placeholder="https://..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+              <input type="text" class="proj-input-demo" data-index="${index}" value="${escapeHtml(proj.demoLink || '')}" placeholder="https://..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
             </div>
           </div>
         </div>
@@ -315,11 +338,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  window.removeProjectCard = (index) => {
+  const removeProjectCard = (index) => {
     currentProjects = collectProjectsData(true);
     currentProjects.splice(index, 1);
     renderProjectsEditor();
   };
+  window.removeProjectCard = removeProjectCard;
+
+  if (projectsContainer) {
+    projectsContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-remove-project');
+      if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const idx = parseInt(btn.getAttribute('data-index'), 10);
+        if (!isNaN(idx)) removeProjectCard(idx);
+      }
+    });
+  }
 
   if (addProjectBtn) {
     addProjectBtn.addEventListener('click', () => {
@@ -387,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--flutter-cyan);">Experience #${index + 1}</h4>
-          <button type="button" class="btn btn-sm" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px;" onclick="removeExperienceCard(${index})">
+          <button type="button" class="btn btn-sm btn-remove-exp" data-index="${index}" style="color: #ef4444; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); padding: 4px 10px; cursor: pointer;">
             <i class="fa-solid fa-trash"></i> Remove
           </button>
         </div>
@@ -395,30 +431,30 @@ document.addEventListener('DOMContentLoaded', () => {
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
             <div>
               <label style="font-size: 0.8rem; color: var(--text-muted);">Job Role / Title</label>
-              <input type="text" class="exp-input-role" data-index="${index}" value="${exp.role || ''}" placeholder="e.g. Senior Flutter Engineer" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+              <input type="text" class="exp-input-role" data-index="${index}" value="${escapeHtml(exp.role || '')}" placeholder="e.g. Senior Flutter Engineer" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
             </div>
             <div>
               <label style="font-size: 0.8rem; color: var(--text-muted);">Company Name</label>
-              <input type="text" class="exp-input-company" data-index="${index}" value="${exp.company || ''}" placeholder="e.g. TechCorp Solutions" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+              <input type="text" class="exp-input-company" data-index="${index}" value="${escapeHtml(exp.company || '')}" placeholder="e.g. TechCorp Solutions" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
             </div>
           </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
             <div>
               <label style="font-size: 0.8rem; color: var(--text-muted);">Duration / Timeline</label>
-              <input type="text" class="exp-input-duration" data-index="${index}" value="${exp.duration || ''}" placeholder="e.g. 2022 - Present" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+              <input type="text" class="exp-input-duration" data-index="${index}" value="${escapeHtml(exp.duration || '')}" placeholder="e.g. 2022 - Present" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
             </div>
             <div>
               <label style="font-size: 0.8rem; color: var(--text-muted);">Location</label>
-              <input type="text" class="exp-input-location" data-index="${index}" value="${exp.location || ''}" placeholder="e.g. Remote / San Francisco, CA" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+              <input type="text" class="exp-input-location" data-index="${index}" value="${escapeHtml(exp.location || '')}" placeholder="e.g. Remote / San Francisco, CA" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
             </div>
           </div>
           <div>
             <label style="font-size: 0.8rem; color: var(--text-muted);">Summary Description</label>
-            <textarea class="exp-input-desc" data-index="${index}" rows="2" placeholder="Brief summary of responsibilities..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px; resize: vertical;">${exp.description || ''}</textarea>
+            <textarea class="exp-input-desc" data-index="${index}" rows="2" placeholder="Brief summary of responsibilities..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px; resize: vertical;">${escapeHtml(exp.description || '')}</textarea>
           </div>
           <div>
             <label style="font-size: 0.8rem; color: var(--text-muted);">Key Highlights & Accomplishments (one bullet point per line)</label>
-            <textarea class="exp-input-highlights" data-index="${index}" rows="5" placeholder="Enter each bullet point on a new line..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px; resize: vertical;">${(exp.highlights || []).join('\n')}</textarea>
+            <textarea class="exp-input-highlights" data-index="${index}" rows="5" placeholder="Enter each bullet point on a new line..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px; resize: vertical;">${escapeHtml((exp.highlights || []).join('\n'))}</textarea>
           </div>
         </div>
       `;
@@ -427,11 +463,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  window.removeExperienceCard = (index) => {
+  const removeExperienceCard = (index) => {
     currentExperiences = collectExperienceData(true);
     currentExperiences.splice(index, 1);
     renderExperienceEditor();
   };
+  window.removeExperienceCard = removeExperienceCard;
+
+  if (experienceContainer) {
+    experienceContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-remove-exp');
+      if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const idx = parseInt(btn.getAttribute('data-index'), 10);
+        if (!isNaN(idx)) removeExperienceCard(idx);
+      }
+    });
+  }
 
   if (addExperienceBtn) {
     addExperienceBtn.addEventListener('click', () => {

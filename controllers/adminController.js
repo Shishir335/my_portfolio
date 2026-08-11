@@ -62,34 +62,83 @@ const upload = multer({
     limits: { fileSize: 10 * 1024 * 1024 }
 });
 
-exports.uploadProfilePhoto = upload.single('photo');
+exports.uploadProfilePhoto = upload.any();
 
 exports.resizeProfilePhoto = catchAsync(async (req, res, next) => {
-    if (!req.file) return next();
+    if (!req.files || req.files.length === 0) return next();
 
-    const targetDir = path.join(__dirname, '..', 'public', 'img', 'users');
-    if (!fs.existsSync(targetDir)) {
-        fs.mkdirSync(targetDir, { recursive: true });
-    }
-
-    const filename = 'custom-avatar.jpg';
-    const filePath = path.join(targetDir, filename);
-
-    if (sharp) {
-        try {
-            await sharp(req.file.buffer)
-                .resize(600, 600, { fit: 'cover', position: 'center' })
-                .toFormat('jpeg')
-                .jpeg({ quality: 90 })
-                .toFile(filePath);
-        } catch (sharpErr) {
-            fs.writeFileSync(filePath, req.file.buffer);
+    // 1) Handle Avatar Photo if provided
+    const avatarFile = req.files.find(f => f.fieldname === 'photo');
+    if (avatarFile) {
+        const targetDir = path.join(__dirname, '..', 'public', 'img', 'users');
+        if (!fs.existsSync(targetDir)) {
+            fs.mkdirSync(targetDir, { recursive: true });
         }
-    } else {
-        fs.writeFileSync(filePath, req.file.buffer);
+
+        const filename = 'custom-avatar.jpg';
+        const filePath = path.join(targetDir, filename);
+
+        if (sharp) {
+            try {
+                await sharp(avatarFile.buffer)
+                    .resize(600, 600, { fit: 'cover', position: 'center' })
+                    .toFormat('jpeg')
+                    .jpeg({ quality: 90 })
+                    .toFile(filePath);
+            } catch (sharpErr) {
+                fs.writeFileSync(filePath, avatarFile.buffer);
+            }
+        } else {
+            fs.writeFileSync(filePath, avatarFile.buffer);
+        }
+
+        req.body.photo = `/img/users/${filename}?t=${Date.now()}`;
     }
 
-    req.body.photo = `/img/users/${filename}?t=${Date.now()}`;
+    // 2) Handle Project Image Uploads
+    const projectFiles = req.files.filter(f => f.fieldname.startsWith('project_image_'));
+    if (projectFiles.length > 0) {
+        let projects = [];
+        if (req.body.projects) {
+            try {
+                projects = typeof req.body.projects === 'string' ? JSON.parse(req.body.projects) : req.body.projects;
+            } catch (e) {
+                projects = [];
+            }
+        }
+
+        const productsDir = path.join(__dirname, '..', 'public', 'img', 'products');
+        if (!fs.existsSync(productsDir)) {
+            fs.mkdirSync(productsDir, { recursive: true });
+        }
+
+        for (const file of projectFiles) {
+            const index = parseInt(file.fieldname.replace('project_image_', ''), 10);
+            if (!isNaN(index) && projects[index]) {
+                const filename = `project-${Date.now()}-${index}.jpg`;
+                const filePath = path.join(productsDir, filename);
+
+                if (sharp) {
+                    try {
+                        await sharp(file.buffer)
+                            .resize(1000, 650, { fit: 'cover' })
+                            .toFormat('jpeg')
+                            .jpeg({ quality: 85 })
+                            .toFile(filePath);
+                    } catch (e) {
+                        fs.writeFileSync(filePath, file.buffer);
+                    }
+                } else {
+                    fs.writeFileSync(filePath, file.buffer);
+                }
+
+                projects[index].image = `/img/products/${filename}?t=${Date.now()}`;
+            }
+        }
+
+        req.body.projects = JSON.stringify(projects);
+    }
+
     next();
 });
 

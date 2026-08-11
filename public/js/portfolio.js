@@ -120,14 +120,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.className = 'project-card';
 
                 const tagsHtml = (proj.tags || []).map(tag => `<span class="tech-badge">${tag}</span>`).join('');
-                const img = proj.image || '/img/app_showcase.png';
-                const demoLink = proj.demoLink || proj.githubLink || '#';
+                const img = (proj.image && proj.image.trim()) ? proj.image.trim() : '/img/app_showcase.png';
+
+                // Determine Play Store and App Store URLs
+                let playStore = proj.playStoreLink || (proj.demoLink && proj.demoLink.includes('play.google') ? proj.demoLink : '');
+                let appStore = proj.appStoreLink || (proj.demoLink && proj.demoLink.includes('apple') ? proj.demoLink : '');
+
+                // Fallbacks if neither is explicit
+                if (!playStore && !appStore) {
+                  playStore = proj.demoLink || 'https://play.google.com/store/apps';
+                  appStore = 'https://apps.apple.com/app';
+                }
+
+                let storeButtonsHtml = '';
+                if (playStore) {
+                  storeButtonsHtml += `<a href="${playStore}" target="_blank" rel="noopener" class="btn-store btn-playstore"><i class="fa-brands fa-google-play"></i> Play Store</a>`;
+                }
+                if (appStore) {
+                  storeButtonsHtml += `<a href="${appStore}" target="_blank" rel="noopener" class="btn-store btn-appstore"><i class="fa-brands fa-apple"></i> App Store</a>`;
+                }
 
                 card.innerHTML = `
                   <div class="project-img-wrapper">
-                    <img src="${img}" alt="${proj.title || 'Project'}" class="project-img">
+                    <img src="${img}" alt="${proj.title || 'Project'}" class="project-img" onerror="this.onerror=null; this.src='/img/app_showcase.png';">
                     <div class="project-overlay">
-                      <a href="${demoLink}" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-solid fa-eye"></i> View Project</a>
+                      <div class="store-buttons-wrapper">
+                        ${storeButtonsHtml}
+                      </div>
                     </div>
                   </div>
                   <div class="project-info">

@@ -284,6 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Projects Section Editor
   let currentProjects = [];
+  const selectedProjectFiles = {};
   const projectsContainer = document.getElementById('admin-projects-editor-container');
   const addProjectBtn = document.getElementById('add-project-card-btn');
 
@@ -321,14 +322,28 @@ document.addEventListener('DOMContentLoaded', () => {
             <label style="font-size: 0.8rem; color: var(--text-muted);">Tags (comma separated)</label>
             <input type="text" class="proj-input-tags" data-index="${index}" value="${escapeHtml((proj.tags || []).join(', '))}" placeholder="e.g. Flutter 3.x, Riverpod, WebSockets" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
           </div>
+          <div>
+            <label style="font-size: 0.8rem; color: var(--text-muted);"><i class="fa-solid fa-image" style="color: var(--flutter-cyan); margin-right: 4px;"></i> Project Cover Image</label>
+            <div style="display: flex; align-items: center; gap: 16px; margin-top: 6px; background: #090d16; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">
+              <img id="proj-img-preview-${index}" src="${escapeHtml(proj.image || '/img/app_showcase.png')}" alt="Preview" style="width: 100px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color);" onerror="this.onerror=null; this.src='/img/app_showcase.png';">
+              <div style="flex: 1; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <label class="btn btn-sm btn-outline" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 0.85rem;">
+                  <i class="fa-solid fa-cloud-arrow-up"></i> Select New Image
+                  <input type="file" class="proj-input-file" data-index="${index}" accept="image/*" style="display: none;">
+                </label>
+                <input type="hidden" class="proj-input-image" data-index="${index}" value="${escapeHtml(proj.image || '/img/app_showcase.png')}">
+                <span id="proj-img-filename-${index}" style="font-size: 0.8rem; color: var(--text-muted);">${selectedProjectFiles[index] ? selectedProjectFiles[index].name : (proj.image ? 'Image set' : 'No image file uploaded')}</span>
+              </div>
+            </div>
+          </div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
             <div>
-              <label style="font-size: 0.8rem; color: var(--text-muted);">GitHub Repo URL</label>
-              <input type="text" class="proj-input-github" data-index="${index}" value="${escapeHtml(proj.githubLink || '')}" placeholder="https://github.com/..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+              <label style="font-size: 0.8rem; color: var(--text-muted);"><i class="fa-brands fa-google-play" style="color: #34d399; margin-right: 4px;"></i> Google Play Store URL</label>
+              <input type="text" class="proj-input-playstore" data-index="${index}" value="${escapeHtml(proj.playStoreLink || (proj.demoLink && proj.demoLink.includes('play.google') ? proj.demoLink : '') || '')}" placeholder="https://play.google.com/store/apps/details?id=..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
             </div>
             <div>
-              <label style="font-size: 0.8rem; color: var(--text-muted);">Live Demo / Store URL</label>
-              <input type="text" class="proj-input-demo" data-index="${index}" value="${escapeHtml(proj.demoLink || '')}" placeholder="https://..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
+              <label style="font-size: 0.8rem; color: var(--text-muted);"><i class="fa-brands fa-apple" style="color: #60a5fa; margin-right: 4px;"></i> Apple App Store URL</label>
+              <input type="text" class="proj-input-appstore" data-index="${index}" value="${escapeHtml(proj.appStoreLink || (proj.demoLink && proj.demoLink.includes('apple') ? proj.demoLink : '') || '')}" placeholder="https://apps.apple.com/app/..." style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #090d16; border: 1px solid var(--border-color); color: #fff; font-size: 0.9rem; margin-top: 4px;">
             </div>
           </div>
         </div>
@@ -341,6 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const removeProjectCard = (index) => {
     currentProjects = collectProjectsData(true);
     currentProjects.splice(index, 1);
+    delete selectedProjectFiles[index];
     renderProjectsEditor();
   };
   window.removeProjectCard = removeProjectCard;
@@ -355,6 +371,26 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isNaN(idx)) removeProjectCard(idx);
       }
     });
+
+    projectsContainer.addEventListener('change', (e) => {
+      if (e.target.classList.contains('proj-input-file')) {
+        const index = parseInt(e.target.getAttribute('data-index'), 10);
+        const file = e.target.files[0];
+        if (file) {
+          selectedProjectFiles[index] = file;
+          const previewImg = document.getElementById(`proj-img-preview-${index}`);
+          const filenameSpan = document.getElementById(`proj-img-filename-${index}`);
+          if (filenameSpan) filenameSpan.textContent = file.name;
+          if (previewImg) {
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+              previewImg.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+          }
+        }
+      }
+    });
   }
 
   if (addProjectBtn) {
@@ -366,8 +402,8 @@ document.addEventListener('DOMContentLoaded', () => {
         description: 'Describe application architecture and features...',
         image: '/img/app_showcase.png',
         tags: ['Flutter', 'Riverpod'],
-        githubLink: 'https://github.com/Shishir335',
-        demoLink: 'https://github.com/Shishir335'
+        playStoreLink: 'https://play.google.com/store/apps',
+        appStoreLink: 'https://apps.apple.com/app'
       });
       renderProjectsEditor();
     });
@@ -378,8 +414,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const badgeInputs = document.querySelectorAll('.proj-input-badge');
     const descInputs = document.querySelectorAll('.proj-input-desc');
     const tagsInputs = document.querySelectorAll('.proj-input-tags');
-    const githubInputs = document.querySelectorAll('.proj-input-github');
-    const demoInputs = document.querySelectorAll('.proj-input-demo');
+    const imageInputs = document.querySelectorAll('.proj-input-image');
+    const playStoreInputs = document.querySelectorAll('.proj-input-playstore');
+    const appStoreInputs = document.querySelectorAll('.proj-input-appstore');
 
     const updatedProjects = [];
     titleInputs.forEach((input, index) => {
@@ -388,18 +425,20 @@ document.addEventListener('DOMContentLoaded', () => {
       const description = descInputs[index] ? descInputs[index].value.trim() : '';
       const tagsStr = tagsInputs[index] ? tagsInputs[index].value : '';
       const tags = tagsStr.split(',').map(t => t.trim()).filter(Boolean);
-      const githubLink = githubInputs[index] ? githubInputs[index].value.trim() : '';
-      const demoLink = demoInputs[index] ? demoInputs[index].value.trim() : '';
+      const imageVal = imageInputs[index] ? imageInputs[index].value.trim() : '';
+      const image = imageVal || '/img/app_showcase.png';
+      const playStoreLink = playStoreInputs[index] ? playStoreInputs[index].value.trim() : '';
+      const appStoreLink = appStoreInputs[index] ? appStoreInputs[index].value.trim() : '';
 
       if (includeAll || title) {
         updatedProjects.push({
           title,
           badge,
           description,
-          image: currentProjects[index]?.image || '/img/app_showcase.png',
+          image,
           tags,
-          githubLink,
-          demoLink
+          playStoreLink,
+          appStoreLink
         });
       }
     });
@@ -628,7 +667,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const projectsData = collectProjectsData();
         const experiencesData = collectExperienceData();
 
-        if (selectedPhotoFile) {
+        const hasProjectFiles = Object.keys(selectedProjectFiles).some(idx => selectedProjectFiles[idx]);
+
+        if (selectedPhotoFile || hasProjectFiles) {
           const formData = new FormData();
           formData.append('name', nameVal);
           if (birthVal) formData.append('birthDate', birthVal);
@@ -644,7 +685,16 @@ document.addEventListener('DOMContentLoaded', () => {
           formData.append('skills', JSON.stringify(skillsData));
           formData.append('projects', JSON.stringify(projectsData));
           formData.append('experiences', JSON.stringify(experiencesData));
-          formData.append('photo', selectedPhotoFile);
+
+          if (selectedPhotoFile) {
+            formData.append('photo', selectedPhotoFile);
+          }
+
+          Object.keys(selectedProjectFiles).forEach(idx => {
+            if (selectedProjectFiles[idx]) {
+              formData.append(`project_image_${idx}`, selectedProjectFiles[idx]);
+            }
+          });
 
           res = await fetch('/api/v1/admin/profile', {
             method: 'PATCH',

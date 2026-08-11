@@ -90,8 +90,8 @@ const userSchema = new mongoose.Schema({
                 description: 'High-frequency crypto market tracker featuring 120 FPS WebSocket candlestick charts, portfolio analytics, and biometrics authentication.',
                 image: '/img/app_showcase.png',
                 tags: ['Flutter 3.x', 'Riverpod', 'WebSockets', 'Node.js'],
-                githubLink: 'https://github.com/Shishir335',
-                demoLink: 'https://github.com/Shishir335'
+                playStoreLink: 'https://play.google.com/store/apps',
+                appStoreLink: 'https://apps.apple.com/app'
             },
             {
                 title: 'HealthHub - Telemedicine & Vital Sync',
@@ -99,8 +99,8 @@ const userSchema = new mongoose.Schema({
                 description: 'Cross-platform mobile application providing HIPAA-compliant video consultations, Bluetooth medical device data sync, and instant prescription delivery.',
                 image: '/img/app_showcase.png',
                 tags: ['Flutter', 'flutter_bloc', 'Firebase', 'WebRTC'],
-                githubLink: 'https://github.com/Shishir335',
-                demoLink: 'https://github.com/Shishir335'
+                playStoreLink: 'https://play.google.com/store/apps',
+                appStoreLink: 'https://apps.apple.com/app'
             },
             {
                 title: 'LogiTrack - Enterprise Fleet Management',
@@ -108,8 +108,8 @@ const userSchema = new mongoose.Schema({
                 description: 'Real-time GPS fleet tracking application with offline route calculation, driver safety metrics, and automated background sync.',
                 image: '/img/app_showcase.png',
                 tags: ['Flutter', 'Google Maps API', 'Express', 'MongoDB'],
-                githubLink: 'https://github.com/Shishir335',
-                demoLink: 'https://github.com/Shishir335'
+                playStoreLink: 'https://play.google.com/store/apps',
+                appStoreLink: 'https://apps.apple.com/app'
             }
         ]
     },

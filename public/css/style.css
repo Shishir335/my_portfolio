@@ -635,8 +635,22 @@ body {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+@media (max-width: 1024px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 640px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 }
 
 .project-card {
@@ -1352,32 +1366,7 @@ body {
   scroll-snap-align: start;
 }
 
-/* Horizontal Scrollable Projects Grid */
-.projects-grid.horizontal-scroll {
-  display: flex;
-  justify-content: safe center;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  gap: 24px;
-  padding: 16px 4px 24px;
-  margin-top: -16px;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: var(--flutter-cyan) var(--bg-dark);
-}
 
-@media (max-width: 1250px) {
-  .projects-grid.horizontal-scroll {
-    justify-content: flex-start;
-  }
-}
-
-.projects-grid.horizontal-scroll .project-card {
-  min-width: 340px;
-  max-width: 420px;
-  flex: 0 0 auto;
-  scroll-snap-align: start;
-}
 
 /* Job Experience & Timeline Section */
 .experience-section {

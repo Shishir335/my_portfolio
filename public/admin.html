@@ -96,6 +96,9 @@
           <button type="button" class="admin-drawer-btn" data-tab="tab-experience">
             <i class="fa-solid fa-briefcase"></i> Job Experience
           </button>
+          <button type="button" class="admin-drawer-btn" data-tab="tab-socials">
+            <i class="fa-solid fa-share-nodes"></i> Social Links
+          </button>
           <button type="button" class="admin-drawer-btn" data-tab="tab-security">
             <i class="fa-solid fa-key"></i> Security & Password
           </button>
@@ -346,7 +349,69 @@
               </div>
             </div>
 
-            <!-- TAB 6: SECURITY & PASSWORD -->
+            <!-- TAB 6: SOCIAL MEDIA LINKS -->
+            <div id="tab-socials" class="admin-tab-pane">
+              <div class="dashboard-header" style="margin-bottom: 20px;">
+                <div>
+                  <h2><i class="fa-solid fa-share-nodes gradient-icon"></i> Social Media & Contact Links</h2>
+                  <p>Manage your GitHub, LinkedIn, Facebook, WhatsApp, and Email profiles.</p>
+                </div>
+              </div>
+
+              <div class="profile-card" style="padding: 24px; border-radius: 12px; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);">
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="admin-social-github-input">GitHub Profile URL</label>
+                    <div class="input-icon-wrapper">
+                      <i class="fa-brands fa-github input-icon"></i>
+                      <input type="url" id="admin-social-github-input" placeholder="https://github.com/yourusername">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="admin-social-linkedin-input">LinkedIn Profile URL</label>
+                    <div class="input-icon-wrapper">
+                      <i class="fa-brands fa-linkedin input-icon"></i>
+                      <input type="url" id="admin-social-linkedin-input" placeholder="https://linkedin.com/in/yourusername">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="admin-social-facebook-input">Facebook Profile URL</label>
+                    <div class="input-icon-wrapper">
+                      <i class="fa-brands fa-facebook input-icon"></i>
+                      <input type="url" id="admin-social-facebook-input" placeholder="https://facebook.com/yourusername">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="admin-social-whatsapp-input">WhatsApp Link / Number</label>
+                    <div class="input-icon-wrapper">
+                      <i class="fa-brands fa-whatsapp input-icon"></i>
+                      <input type="text" id="admin-social-whatsapp-input" placeholder="https://wa.me/1234567890 or phone number">
+                    </div>
+                  </div>
+
+                  <div class="form-group" style="grid-column: 1 / -1;">
+                    <label for="admin-social-email-input">Email Address</label>
+                    <div class="input-icon-wrapper">
+                      <i class="fa-solid fa-envelope input-icon"></i>
+                      <input type="email" id="admin-social-email-input" placeholder="yourname@example.com">
+                    </div>
+                  </div>
+
+                  <div class="form-group" style="grid-column: 1 / -1; margin-top: 10px;">
+                    <label for="admin-footer-text-input">Bottom Footer Copyright Text</label>
+                    <div class="input-icon-wrapper">
+                      <i class="fa-solid fa-copyright input-icon"></i>
+                      <input type="text" id="admin-footer-text-input" placeholder="© 2026 Flutter Developer Portfolio. Built with Flutter, Dart, Node.js & Express.">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 7: SECURITY & PASSWORD -->
             <div id="tab-security" class="admin-tab-pane">
               <div class="dashboard-header" style="margin-bottom: 20px;">
                 <div>

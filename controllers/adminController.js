@@ -192,6 +192,14 @@ exports.getProfile = catchAsync(async (req, res, next) => {
                 widget2Title: user.widget2Title || 'Clean Architecture',
                 widget2Subtitle: user.widget2Subtitle || 'Riverpod / BLoC Pattern',
                 careerStartDate: user.careerStartDate ? user.careerStartDate.toISOString().split('T')[0] : '',
+                socialLinks: user.socialLinks || {
+                    github: 'https://github.com',
+                    linkedin: 'https://linkedin.com',
+                    facebook: 'https://facebook.com',
+                    whatsapp: 'https://wa.me/1234567890',
+                    email: 'mahbub@gmail.com'
+                },
+                footerText: user.footerText || '© 2026 Flutter Developer Portfolio. Built with Flutter, Dart, Node.js & Express.',
                 statApps: user.statApps || '25+',
                 statCrashFree: user.statCrashFree || '99.9%',
                 statUsers: user.statUsers || '100k+',
@@ -221,6 +229,14 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
     if (req.body.careerStartDate !== undefined) {
         fieldsToUpdate.careerStartDate = req.body.careerStartDate ? req.body.careerStartDate : null;
     }
+    if (req.body.socialLinks !== undefined) {
+        try {
+            fieldsToUpdate.socialLinks = typeof req.body.socialLinks === 'string' ? JSON.parse(req.body.socialLinks) : req.body.socialLinks;
+        } catch (err) {
+            fieldsToUpdate.socialLinks = req.body.socialLinks;
+        }
+    }
+    if (req.body.footerText !== undefined) fieldsToUpdate.footerText = req.body.footerText;
     if (req.body.statApps !== undefined) fieldsToUpdate.statApps = req.body.statApps;
     if (req.body.statCrashFree !== undefined) fieldsToUpdate.statCrashFree = req.body.statCrashFree;
     if (req.body.statUsers !== undefined) fieldsToUpdate.statUsers = req.body.statUsers;
@@ -279,6 +295,14 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
                 widget2Title: updatedUser.widget2Title || 'Clean Architecture',
                 widget2Subtitle: updatedUser.widget2Subtitle || 'Riverpod / BLoC Pattern',
                 careerStartDate: updatedUser.careerStartDate ? updatedUser.careerStartDate.toISOString().split('T')[0] : '',
+                socialLinks: updatedUser.socialLinks || {
+                    github: 'https://github.com',
+                    linkedin: 'https://linkedin.com',
+                    facebook: 'https://facebook.com',
+                    whatsapp: 'https://wa.me/1234567890',
+                    email: 'mahbub@gmail.com'
+                },
+                footerText: updatedUser.footerText || '© 2026 Flutter Developer Portfolio. Built with Flutter, Dart, Node.js & Express.',
                 statApps: updatedUser.statApps || '25+',
                 statCrashFree: updatedUser.statCrashFree || '99.9%',
                 statUsers: updatedUser.statUsers || '100k+',
@@ -318,6 +342,14 @@ exports.getPublicProfile = catchAsync(async (req, res, next) => {
             widget2Title: user && user.widget2Title ? user.widget2Title : 'Clean Architecture',
             widget2Subtitle: user && user.widget2Subtitle ? user.widget2Subtitle : 'Riverpod / BLoC Pattern',
             careerStartDate: user && user.careerStartDate ? user.careerStartDate.toISOString().split('T')[0] : '',
+            socialLinks: user && user.socialLinks ? user.socialLinks : {
+                github: 'https://github.com',
+                linkedin: 'https://linkedin.com',
+                facebook: 'https://facebook.com',
+                whatsapp: 'https://wa.me/1234567890',
+                email: 'mahbub@gmail.com'
+            },
+            footerText: user && user.footerText ? user.footerText : '© 2026 Flutter Developer Portfolio. Built with Flutter, Dart, Node.js & Express.',
             statApps: user && user.statApps ? user.statApps : '25+',
             statCrashFree: user && user.statCrashFree ? user.statCrashFree : '99.9%',
             statUsers: user && user.statUsers ? user.statUsers : '100k+',

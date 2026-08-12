@@ -107,6 +107,31 @@ document.addEventListener('DOMContentLoaded', () => {
           if (d.statCrashFree && crashEl) crashEl.textContent = d.statCrashFree;
           if (d.statUsers && usersEl) usersEl.textContent = d.statUsers;
 
+          if (d.socialLinks) {
+            const githubEl = document.getElementById('social-github-link');
+            const linkedinEl = document.getElementById('social-linkedin-link');
+            const facebookEl = document.getElementById('social-facebook-link');
+            const whatsappEl = document.getElementById('social-whatsapp-link');
+            const emailEl = document.getElementById('social-email-link');
+
+            if (d.socialLinks.github && githubEl) githubEl.href = d.socialLinks.github;
+            if (d.socialLinks.linkedin && linkedinEl) linkedinEl.href = d.socialLinks.linkedin;
+            if (d.socialLinks.facebook && facebookEl) facebookEl.href = d.socialLinks.facebook;
+            if (d.socialLinks.whatsapp && whatsappEl) {
+              const wa = d.socialLinks.whatsapp.trim();
+              whatsappEl.href = wa.startsWith('http') || wa.startsWith('https') ? wa : `https://wa.me/${wa.replace(/[^0-9]/g, '')}`;
+            }
+            if (d.socialLinks.email && emailEl) {
+              const em = d.socialLinks.email.trim();
+              emailEl.href = em.startsWith('mailto:') ? em : `mailto:${em}`;
+            }
+          }
+
+          const footerTextEl = document.getElementById('footer-copyright-text');
+          if (d.footerText && footerTextEl) {
+            footerTextEl.textContent = d.footerText;
+          }
+
           if (d.skills && Array.isArray(d.skills) && d.skills.length > 0) {
             const skillsContainer = document.getElementById('skills-cards-container');
             if (skillsContainer) {

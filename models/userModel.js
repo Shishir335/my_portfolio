@@ -58,6 +58,17 @@ const userSchema = new mongoose.Schema({
     careerStartDate: {
         type: Date
     },
+    socialLinks: {
+        github: { type: String, default: 'https://github.com' },
+        linkedin: { type: String, default: 'https://linkedin.com' },
+        facebook: { type: String, default: 'https://facebook.com' },
+        whatsapp: { type: String, default: 'https://wa.me/1234567890' },
+        email: { type: String, default: 'mahbub@gmail.com' }
+    },
+    footerText: {
+        type: String,
+        default: '© 2026 Flutter Developer Portfolio. Built with Flutter, Dart, Node.js & Express.'
+    },
     statApps: {
         type: String,
         default: '25+'

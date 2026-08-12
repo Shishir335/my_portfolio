@@ -32,6 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const statCrashFreeInput = document.getElementById('admin-stat-crashfree-input');
   const statUsersInput = document.getElementById('admin-stat-users-input');
 
+  const socialGithubInput = document.getElementById('admin-social-github-input');
+  const socialLinkedinInput = document.getElementById('admin-social-linkedin-input');
+  const socialFacebookInput = document.getElementById('admin-social-facebook-input');
+  const socialWhatsappInput = document.getElementById('admin-social-whatsapp-input');
+  const socialEmailInput = document.getElementById('admin-social-email-input');
+  const footerTextInput = document.getElementById('admin-footer-text-input');
+
   const saveProfileBtn = document.getElementById('save-profile-btn');
 
   const toast = document.getElementById('admin-toast');
@@ -189,6 +196,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (user.statApps && statAppsInput) statAppsInput.value = user.statApps;
       if (user.statCrashFree && statCrashFreeInput) statCrashFreeInput.value = user.statCrashFree;
       if (user.statUsers && statUsersInput) statUsersInput.value = user.statUsers;
+
+      if (user.socialLinks) {
+        if (user.socialLinks.github && socialGithubInput) socialGithubInput.value = user.socialLinks.github;
+        if (user.socialLinks.linkedin && socialLinkedinInput) socialLinkedinInput.value = user.socialLinks.linkedin;
+        if (user.socialLinks.facebook && socialFacebookInput) socialFacebookInput.value = user.socialLinks.facebook;
+        if (user.socialLinks.whatsapp && socialWhatsappInput) socialWhatsappInput.value = user.socialLinks.whatsapp;
+        if (user.socialLinks.email && socialEmailInput) socialEmailInput.value = user.socialLinks.email;
+      }
+      if (user.footerText && footerTextInput) footerTextInput.value = user.footerText;
 
       if (user.skills && Array.isArray(user.skills)) {
         currentSkills = user.skills;
@@ -720,6 +736,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const experiencesData = collectExperienceData();
 
         const hasProjectFiles = Object.keys(selectedProjectFiles).some(idx => selectedProjectFiles[idx]);
+        const socialLinksObj = {
+          github: socialGithubInput ? socialGithubInput.value.trim() : '',
+          linkedin: socialLinkedinInput ? socialLinkedinInput.value.trim() : '',
+          facebook: socialFacebookInput ? socialFacebookInput.value.trim() : '',
+          whatsapp: socialWhatsappInput ? socialWhatsappInput.value.trim() : '',
+          email: socialEmailInput ? socialEmailInput.value.trim() : ''
+        };
 
         if (selectedPhotoFile || hasProjectFiles) {
           const formData = new FormData();
@@ -740,6 +763,8 @@ document.addEventListener('DOMContentLoaded', () => {
           if (statAppsInput) formData.append('statApps', statAppsInput.value.trim());
           if (statCrashFreeInput) formData.append('statCrashFree', statCrashFreeInput.value.trim());
           if (statUsersInput) formData.append('statUsers', statUsersInput.value.trim());
+          if (footerTextInput) formData.append('footerText', footerTextInput.value.trim());
+          formData.append('socialLinks', JSON.stringify(socialLinksObj));
           formData.append('skills', JSON.stringify(skillsData));
           formData.append('projects', JSON.stringify(projectsData));
           formData.append('experiences', JSON.stringify(experiencesData));
@@ -777,6 +802,8 @@ document.addEventListener('DOMContentLoaded', () => {
             statApps: statAppsInput ? statAppsInput.value.trim() : '',
             statCrashFree: statCrashFreeInput ? statCrashFreeInput.value.trim() : '',
             statUsers: statUsersInput ? statUsersInput.value.trim() : '',
+            socialLinks: socialLinksObj,
+            footerText: footerTextInput ? footerTextInput.value.trim() : '',
             skills: skillsData,
             projects: projectsData,
             experiences: experiencesData

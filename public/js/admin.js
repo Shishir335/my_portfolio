@@ -935,6 +935,72 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Change Password Handler
+  const currentPasswordInput = document.getElementById('current-password-input');
+  const newPasswordInput = document.getElementById('new-password-input');
+  const confirmPasswordInput = document.getElementById('confirm-password-input');
+  const changePasswordBtn = document.getElementById('change-password-btn');
+
+  if (changePasswordBtn) {
+    changePasswordBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const currentPassword = currentPasswordInput ? currentPasswordInput.value : '';
+      const password = newPasswordInput ? newPasswordInput.value : '';
+      const confirmPassword = confirmPasswordInput ? confirmPasswordInput.value : '';
+
+      if (!currentPassword || !password || !confirmPassword) {
+        showToast('Please fill in all password fields.', 'error');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showToast('New passwords do not match!', 'error');
+        return;
+      }
+
+      if (password.length < 8) {
+        showToast('New password must be at least 8 characters long.', 'error');
+        return;
+      }
+
+      const token = getToken();
+      if (!token) return;
+
+      changePasswordBtn.disabled = true;
+      changePasswordBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Updating...';
+
+      try {
+        const res = await fetch('/api/v1/admin/change-password', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ currentPassword, password, confirmPassword })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.status === 'success') {
+          showToast('Password changed successfully!', 'success');
+          if (data.token) {
+            setToken(data.token);
+          }
+          if (currentPasswordInput) currentPasswordInput.value = '';
+          if (newPasswordInput) newPasswordInput.value = '';
+          if (confirmPasswordInput) confirmPasswordInput.value = '';
+        } else {
+          showToast(data.message || 'Failed to update password.', 'error');
+        }
+      } catch (err) {
+        showToast('An error occurred while updating password.', 'error');
+      } finally {
+        changePasswordBtn.disabled = false;
+        changePasswordBtn.innerHTML = '<i class="fa-solid fa-shield-halved"></i> Update Password';
+      }
+    });
+  }
+
   // Initialize Auth Check
   checkAuth().then(() => fetchContactMessages());
 });

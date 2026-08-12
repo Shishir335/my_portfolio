@@ -24,6 +24,8 @@ router
         adminController.updateProfile
     );
 
+router.patch('/change-password', authController.changePassword);
+
 router.get('/messages', contactController.getContactMessages);
 router.delete('/messages/:id', contactController.deleteContactMessage);
 router.patch('/messages/:id/read', contactController.markMessageRead);

@@ -15,7 +15,7 @@ const AppError = require('../utils/appError');
 // Ensure an initial admin account exists for easy login
 const ensureDefaultAdmin = async () => {
     try {
-        const admin = await User.findOne({ email: 'admin@portfolio.dev' }).select('+password');
+        const admin = await User.findOne({ email: 'admin@portfolio.dev' });
         if (!admin) {
             await User.create({
                 name: 'Flutter Developer',
@@ -27,14 +27,6 @@ const ensureDefaultAdmin = async () => {
                 birthDate: new Date('1998-05-15')
             });
             console.log('Default admin account created: admin@portfolio.dev / AdminPass123!');
-        } else {
-            const isMatch = await admin.correctPassword('AdminPass123!', admin.password);
-            if (!isMatch) {
-                admin.password = 'AdminPass123!';
-                admin.confirmPassword = 'AdminPass123!';
-                await admin.save();
-                console.log('Default admin password reset to: AdminPass123!');
-            }
         }
     } catch (err) {
         console.error('Auto-seed admin warning:', err.message);

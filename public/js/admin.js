@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const widget1SubtitleInput = document.getElementById('admin-widget1-subtitle-input');
   const widget2TitleInput = document.getElementById('admin-widget2-title-input');
   const widget2SubtitleInput = document.getElementById('admin-widget2-subtitle-input');
-  const statYearsInput = document.getElementById('admin-stat-years-input');
   const statAppsInput = document.getElementById('admin-stat-apps-input');
   const statCrashFreeInput = document.getElementById('admin-stat-crashfree-input');
   const statUsersInput = document.getElementById('admin-stat-users-input');
@@ -115,6 +114,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  const careerStartDateInput = document.getElementById('admin-career-startdate-input');
+  let fpCareerInstance = null;
+
+  const calculateYearsOfExp = (startDateStr) => {
+    if (!startDateStr) return null;
+    const startDate = new Date(startDateStr);
+    if (isNaN(startDate.getTime())) return null;
+    const now = new Date();
+    let years = now.getFullYear() - startDate.getFullYear();
+    const monthDiff = now.getMonth() - startDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < startDate.getDate())) {
+      years--;
+    }
+    return years > 0 ? `${years}+` : '1+';
+  };
+
+  if (careerStartDateInput && typeof flatpickr !== 'undefined') {
+    fpCareerInstance = flatpickr(careerStartDateInput, {
+      dateFormat: 'Y-m-d',
+      maxDate: 'today',
+      defaultDate: '2020-01-01',
+      altInput: true,
+      altFormat: 'F j, Y',
+      theme: 'dark',
+      animate: true,
+      disableMobile: true
+    });
+
+    const careerCalendarIcon = document.getElementById('career-calendar-icon-btn');
+    if (careerCalendarIcon && fpCareerInstance) {
+      careerCalendarIcon.addEventListener('click', () => fpCareerInstance.open());
+    }
+  }
+
   const populateDashboard = (user) => {
     if (!user) return;
     try {
@@ -141,7 +174,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (user.widget1Subtitle && widget1SubtitleInput) widget1SubtitleInput.value = user.widget1Subtitle;
       if (user.widget2Title && widget2TitleInput) widget2TitleInput.value = user.widget2Title;
       if (user.widget2Subtitle && widget2SubtitleInput) widget2SubtitleInput.value = user.widget2Subtitle;
-      if (user.statYearsExp && statYearsInput) statYearsInput.value = user.statYearsExp;
+      if (user.careerStartDate && careerStartDateInput) {
+        if (fpCareerInstance) {
+          try {
+            fpCareerInstance.setDate(user.careerStartDate, false);
+          } catch (e) {
+            careerStartDateInput.value = user.careerStartDate;
+          }
+        } else {
+          careerStartDateInput.value = user.careerStartDate;
+        }
+      }
+
       if (user.statApps && statAppsInput) statAppsInput.value = user.statApps;
       if (user.statCrashFree && statCrashFreeInput) statCrashFreeInput.value = user.statCrashFree;
       if (user.statUsers && statUsersInput) statUsersInput.value = user.statUsers;
@@ -690,7 +734,9 @@ document.addEventListener('DOMContentLoaded', () => {
           if (widget1SubtitleInput) formData.append('widget1Subtitle', widget1SubtitleInput.value.trim());
           if (widget2TitleInput) formData.append('widget2Title', widget2TitleInput.value.trim());
           if (widget2SubtitleInput) formData.append('widget2Subtitle', widget2SubtitleInput.value.trim());
-          if (statYearsInput) formData.append('statYearsExp', statYearsInput.value.trim());
+          if (careerStartDateInput && careerStartDateInput.value) {
+            formData.append('careerStartDate', careerStartDateInput.value.trim());
+          }
           if (statAppsInput) formData.append('statApps', statAppsInput.value.trim());
           if (statCrashFreeInput) formData.append('statCrashFree', statCrashFreeInput.value.trim());
           if (statUsersInput) formData.append('statUsers', statUsersInput.value.trim());
@@ -727,7 +773,7 @@ document.addEventListener('DOMContentLoaded', () => {
             widget1Subtitle: widget1SubtitleInput ? widget1SubtitleInput.value.trim() : '',
             widget2Title: widget2TitleInput ? widget2TitleInput.value.trim() : '',
             widget2Subtitle: widget2SubtitleInput ? widget2SubtitleInput.value.trim() : '',
-            statYearsExp: statYearsInput ? statYearsInput.value.trim() : '',
+            careerStartDate: careerStartDateInput && careerStartDateInput.value ? careerStartDateInput.value.trim() : null,
             statApps: statAppsInput ? statAppsInput.value.trim() : '',
             statCrashFree: statCrashFreeInput ? statCrashFreeInput.value.trim() : '',
             statUsers: statUsersInput ? statUsersInput.value.trim() : '',

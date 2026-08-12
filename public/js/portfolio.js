@@ -89,7 +89,20 @@ document.addEventListener('DOMContentLoaded', () => {
           if (d.widget1Subtitle && widget1SubtitleEl) widget1SubtitleEl.textContent = d.widget1Subtitle;
           if (d.widget2Title && widget2TitleEl) widget2TitleEl.textContent = d.widget2Title;
           if (d.widget2Subtitle && widget2SubtitleEl) widget2SubtitleEl.textContent = d.widget2Subtitle;
-          if (d.statYearsExp && yearsEl) yearsEl.textContent = d.statYearsExp;
+          
+          if (d.careerStartDate && yearsEl) {
+            const startDate = new Date(d.careerStartDate);
+            if (!isNaN(startDate.getTime())) {
+              const now = new Date();
+              let yrs = now.getFullYear() - startDate.getFullYear();
+              const monthDiff = now.getMonth() - startDate.getMonth();
+              if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < startDate.getDate())) {
+                yrs--;
+              }
+              yearsEl.textContent = yrs > 0 ? `${yrs}+` : '1+';
+            }
+          }
+
           if (d.statApps && appsEl) appsEl.textContent = d.statApps;
           if (d.statCrashFree && crashEl) crashEl.textContent = d.statCrashFree;
           if (d.statUsers && usersEl) usersEl.textContent = d.statUsers;

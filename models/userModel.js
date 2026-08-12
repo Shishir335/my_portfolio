@@ -55,9 +55,8 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'Riverpod / BLoC Pattern'
     },
-    statYearsExp: {
-        type: String,
-        default: '4+'
+    careerStartDate: {
+        type: Date
     },
     statApps: {
         type: String,

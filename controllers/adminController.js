@@ -199,7 +199,7 @@ exports.getProfile = catchAsync(async (req, res, next) => {
                 widget1Subtitle: user.widget1Subtitle || 'Dart & Impeller Engine',
                 widget2Title: user.widget2Title || 'Clean Architecture',
                 widget2Subtitle: user.widget2Subtitle || 'Riverpod / BLoC Pattern',
-                statYearsExp: user.statYearsExp || '4+',
+                careerStartDate: user.careerStartDate ? user.careerStartDate.toISOString().split('T')[0] : '',
                 statApps: user.statApps || '25+',
                 statCrashFree: user.statCrashFree || '99.9%',
                 statUsers: user.statUsers || '100k+',
@@ -226,7 +226,9 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
     if (req.body.widget1Subtitle !== undefined) fieldsToUpdate.widget1Subtitle = req.body.widget1Subtitle;
     if (req.body.widget2Title !== undefined) fieldsToUpdate.widget2Title = req.body.widget2Title;
     if (req.body.widget2Subtitle !== undefined) fieldsToUpdate.widget2Subtitle = req.body.widget2Subtitle;
-    if (req.body.statYearsExp !== undefined) fieldsToUpdate.statYearsExp = req.body.statYearsExp;
+    if (req.body.careerStartDate !== undefined) {
+        fieldsToUpdate.careerStartDate = req.body.careerStartDate ? req.body.careerStartDate : null;
+    }
     if (req.body.statApps !== undefined) fieldsToUpdate.statApps = req.body.statApps;
     if (req.body.statCrashFree !== undefined) fieldsToUpdate.statCrashFree = req.body.statCrashFree;
     if (req.body.statUsers !== undefined) fieldsToUpdate.statUsers = req.body.statUsers;
@@ -284,7 +286,7 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
                 widget1Subtitle: updatedUser.widget1Subtitle || 'Dart & Impeller Engine',
                 widget2Title: updatedUser.widget2Title || 'Clean Architecture',
                 widget2Subtitle: updatedUser.widget2Subtitle || 'Riverpod / BLoC Pattern',
-                statYearsExp: updatedUser.statYearsExp || '4+',
+                careerStartDate: updatedUser.careerStartDate ? updatedUser.careerStartDate.toISOString().split('T')[0] : '',
                 statApps: updatedUser.statApps || '25+',
                 statCrashFree: updatedUser.statCrashFree || '99.9%',
                 statUsers: updatedUser.statUsers || '100k+',
@@ -323,7 +325,7 @@ exports.getPublicProfile = catchAsync(async (req, res, next) => {
             widget1Subtitle: user && user.widget1Subtitle ? user.widget1Subtitle : 'Dart & Impeller Engine',
             widget2Title: user && user.widget2Title ? user.widget2Title : 'Clean Architecture',
             widget2Subtitle: user && user.widget2Subtitle ? user.widget2Subtitle : 'Riverpod / BLoC Pattern',
-            statYearsExp: user && user.statYearsExp ? user.statYearsExp : '4+',
+            careerStartDate: user && user.careerStartDate ? user.careerStartDate.toISOString().split('T')[0] : '',
             statApps: user && user.statApps ? user.statApps : '25+',
             statCrashFree: user && user.statCrashFree ? user.statCrashFree : '99.9%',
             statUsers: user && user.statUsers ? user.statUsers : '100k+',

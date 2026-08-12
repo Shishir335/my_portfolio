@@ -24,6 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const aboutBadgeInput = document.getElementById('admin-about-badge-input');
   const aboutTitleInput = document.getElementById('admin-about-title-input');
   const aboutBioInput = document.getElementById('admin-about-bio-input');
+  const widget1TitleInput = document.getElementById('admin-widget1-title-input');
+  const widget1SubtitleInput = document.getElementById('admin-widget1-subtitle-input');
+  const widget2TitleInput = document.getElementById('admin-widget2-title-input');
+  const widget2SubtitleInput = document.getElementById('admin-widget2-subtitle-input');
   const statYearsInput = document.getElementById('admin-stat-years-input');
   const statAppsInput = document.getElementById('admin-stat-apps-input');
   const statCrashFreeInput = document.getElementById('admin-stat-crashfree-input');
@@ -133,6 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (user.aboutBadge && aboutBadgeInput) aboutBadgeInput.value = user.aboutBadge;
       if (user.aboutTitle && aboutTitleInput) aboutTitleInput.value = user.aboutTitle;
       if (user.aboutBio && aboutBioInput) aboutBioInput.value = user.aboutBio;
+      if (user.widget1Title && widget1TitleInput) widget1TitleInput.value = user.widget1Title;
+      if (user.widget1Subtitle && widget1SubtitleInput) widget1SubtitleInput.value = user.widget1Subtitle;
+      if (user.widget2Title && widget2TitleInput) widget2TitleInput.value = user.widget2Title;
+      if (user.widget2Subtitle && widget2SubtitleInput) widget2SubtitleInput.value = user.widget2Subtitle;
       if (user.statYearsExp && statYearsInput) statYearsInput.value = user.statYearsExp;
       if (user.statApps && statAppsInput) statAppsInput.value = user.statApps;
       if (user.statCrashFree && statCrashFreeInput) statCrashFreeInput.value = user.statCrashFree;
@@ -678,6 +686,10 @@ document.addEventListener('DOMContentLoaded', () => {
           if (aboutBadgeInput) formData.append('aboutBadge', aboutBadgeInput.value.trim());
           if (aboutTitleInput) formData.append('aboutTitle', aboutTitleInput.value.trim());
           if (aboutBioInput) formData.append('aboutBio', aboutBioInput.value.trim());
+          if (widget1TitleInput) formData.append('widget1Title', widget1TitleInput.value.trim());
+          if (widget1SubtitleInput) formData.append('widget1Subtitle', widget1SubtitleInput.value.trim());
+          if (widget2TitleInput) formData.append('widget2Title', widget2TitleInput.value.trim());
+          if (widget2SubtitleInput) formData.append('widget2Subtitle', widget2SubtitleInput.value.trim());
           if (statYearsInput) formData.append('statYearsExp', statYearsInput.value.trim());
           if (statAppsInput) formData.append('statApps', statAppsInput.value.trim());
           if (statCrashFreeInput) formData.append('statCrashFree', statCrashFreeInput.value.trim());
@@ -711,6 +723,10 @@ document.addEventListener('DOMContentLoaded', () => {
             aboutBadge: aboutBadgeInput ? aboutBadgeInput.value.trim() : '',
             aboutTitle: aboutTitleInput ? aboutTitleInput.value.trim() : '',
             aboutBio: aboutBioInput ? aboutBioInput.value.trim() : '',
+            widget1Title: widget1TitleInput ? widget1TitleInput.value.trim() : '',
+            widget1Subtitle: widget1SubtitleInput ? widget1SubtitleInput.value.trim() : '',
+            widget2Title: widget2TitleInput ? widget2TitleInput.value.trim() : '',
+            widget2Subtitle: widget2SubtitleInput ? widget2SubtitleInput.value.trim() : '',
             statYearsExp: statYearsInput ? statYearsInput.value.trim() : '',
             statApps: statAppsInput ? statAppsInput.value.trim() : '',
             statCrashFree: statCrashFreeInput ? statCrashFreeInput.value.trim() : '',

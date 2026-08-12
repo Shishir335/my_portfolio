@@ -195,6 +195,10 @@ exports.getProfile = catchAsync(async (req, res, next) => {
                 aboutBadge: user.aboutBadge || 'Available for Senior Flutter & Mobile Engineering Roles',
                 aboutTitle: user.aboutTitle || 'Crafting 60 FPS Cross-Platform Mobile Apps',
                 aboutBio: user.aboutBio || 'Senior Flutter & Dart Developer specializing in pixel-perfect UI, clean architecture, Riverpod/BLoC state management, and seamless Node.js REST API integrations for iOS, Android & Web.',
+                widget1Title: user.widget1Title || 'Flutter 3.x',
+                widget1Subtitle: user.widget1Subtitle || 'Dart & Impeller Engine',
+                widget2Title: user.widget2Title || 'Clean Architecture',
+                widget2Subtitle: user.widget2Subtitle || 'Riverpod / BLoC Pattern',
                 statYearsExp: user.statYearsExp || '4+',
                 statApps: user.statApps || '25+',
                 statCrashFree: user.statCrashFree || '99.9%',
@@ -218,6 +222,10 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
     if (req.body.aboutBadge !== undefined) fieldsToUpdate.aboutBadge = req.body.aboutBadge;
     if (req.body.aboutTitle !== undefined) fieldsToUpdate.aboutTitle = req.body.aboutTitle;
     if (req.body.aboutBio !== undefined) fieldsToUpdate.aboutBio = req.body.aboutBio;
+    if (req.body.widget1Title !== undefined) fieldsToUpdate.widget1Title = req.body.widget1Title;
+    if (req.body.widget1Subtitle !== undefined) fieldsToUpdate.widget1Subtitle = req.body.widget1Subtitle;
+    if (req.body.widget2Title !== undefined) fieldsToUpdate.widget2Title = req.body.widget2Title;
+    if (req.body.widget2Subtitle !== undefined) fieldsToUpdate.widget2Subtitle = req.body.widget2Subtitle;
     if (req.body.statYearsExp !== undefined) fieldsToUpdate.statYearsExp = req.body.statYearsExp;
     if (req.body.statApps !== undefined) fieldsToUpdate.statApps = req.body.statApps;
     if (req.body.statCrashFree !== undefined) fieldsToUpdate.statCrashFree = req.body.statCrashFree;
@@ -272,6 +280,10 @@ exports.updateProfile = catchAsync(async (req, res, next) => {
                 aboutBadge: updatedUser.aboutBadge || 'Available for Senior Flutter & Mobile Engineering Roles',
                 aboutTitle: updatedUser.aboutTitle || 'Crafting 60 FPS Cross-Platform Mobile Apps',
                 aboutBio: updatedUser.aboutBio || 'Senior Flutter & Dart Developer specializing in pixel-perfect UI, clean architecture, Riverpod/BLoC state management, and seamless Node.js REST API integrations for iOS, Android & Web.',
+                widget1Title: updatedUser.widget1Title || 'Flutter 3.x',
+                widget1Subtitle: updatedUser.widget1Subtitle || 'Dart & Impeller Engine',
+                widget2Title: updatedUser.widget2Title || 'Clean Architecture',
+                widget2Subtitle: updatedUser.widget2Subtitle || 'Riverpod / BLoC Pattern',
                 statYearsExp: updatedUser.statYearsExp || '4+',
                 statApps: updatedUser.statApps || '25+',
                 statCrashFree: updatedUser.statCrashFree || '99.9%',
@@ -307,6 +319,10 @@ exports.getPublicProfile = catchAsync(async (req, res, next) => {
             aboutBadge: user && user.aboutBadge ? user.aboutBadge : 'Available for Senior Flutter & Mobile Engineering Roles',
             aboutTitle: user && user.aboutTitle ? user.aboutTitle : 'Crafting 60 FPS Cross-Platform Mobile Apps',
             aboutBio: user && user.aboutBio ? user.aboutBio : 'Senior Flutter & Dart Developer specializing in pixel-perfect UI, clean architecture, Riverpod/BLoC state management, and seamless Node.js REST API integrations for iOS, Android & Web.',
+            widget1Title: user && user.widget1Title ? user.widget1Title : 'Flutter 3.x',
+            widget1Subtitle: user && user.widget1Subtitle ? user.widget1Subtitle : 'Dart & Impeller Engine',
+            widget2Title: user && user.widget2Title ? user.widget2Title : 'Clean Architecture',
+            widget2Subtitle: user && user.widget2Subtitle ? user.widget2Subtitle : 'Riverpod / BLoC Pattern',
             statYearsExp: user && user.statYearsExp ? user.statYearsExp : '4+',
             statApps: user && user.statApps ? user.statApps : '25+',
             statCrashFree: user && user.statCrashFree ? user.statCrashFree : '99.9%',

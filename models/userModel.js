@@ -39,6 +39,22 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'Senior Flutter & Dart Developer specializing in pixel-perfect UI, clean architecture, Riverpod/BLoC state management, and seamless Node.js REST API integrations for iOS, Android & Web.'
     },
+    widget1Title: {
+        type: String,
+        default: 'Flutter 3.x'
+    },
+    widget1Subtitle: {
+        type: String,
+        default: 'Dart & Impeller Engine'
+    },
+    widget2Title: {
+        type: String,
+        default: 'Clean Architecture'
+    },
+    widget2Subtitle: {
+        type: String,
+        default: 'Riverpod / BLoC Pattern'
+    },
     statYearsExp: {
         type: String,
         default: '4+'
